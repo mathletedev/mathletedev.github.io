@@ -1,4 +1,5 @@
 ---
+import { PaintBrushIcon } from "@heroicons/react/24/solid";
 import Matrix from "../components/Matrix.astro";
 import SideBar from "../components/SideBar.astro";
 import TabBar from "../components/TabBar.astro";
@@ -36,6 +37,13 @@ import { COLOURS } from "../lib/colours";
         />
     </div>
     <SideBar />
+    <a
+        class="desktop fixed bottom-4 right-16"
+        href="https://mathletedev.github.io/art"
+        target="_blank"
+    >
+        <PaintBrushIcon className="m-auto h-8 w-8 text-overlay0" />
+    </a>
     <a
         class="desktop fixed bottom-4 right-4"
         href="https://github.com/mathletedev/mathletedev.github.io"

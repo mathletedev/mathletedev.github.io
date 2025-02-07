@@ -11,6 +11,7 @@
         "@astrojs/prefetch": "0.4.1",
         "@astrojs/tailwind": "5.1.2",
         "@catppuccin/palette": "^1.2.0",
+        "@heroicons/react": "^2.2.0",
         "caniuse-lite": "^1.0.30001684",
         "chart.js": "^4.2.1",
         "mdast-util-to-string": "^4.0.0",
