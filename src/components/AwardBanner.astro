@@ -2,10 +2,10 @@
 export interface Props {
     title: string;
     href?: string;
-    year?: string;
+    date?: string;
 }
 
-const { title, href, year } = Astro.props as Props;
+const { title, href, date } = Astro.props as Props;
 ---
 
 <a class="opacity-0 transition-opacity duration-1000" {href} target="_blank">
@@ -14,7 +14,7 @@ const { title, href, year } = Astro.props as Props;
             {title}
         </p>
         <div class="flex-grow"></div>
-        <p class="pr-4 text-surface2">{year}</p>
+        <p class="pr-4 text-surface2">{date}</p>
     </div>
     <div class="mb-2 h-0.5 w-full bg-surface0 md:mb-4"></div>
 </a>
