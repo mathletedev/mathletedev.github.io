@@ -8,15 +8,15 @@ skills.width = skills.height = Math.min(500, window.innerWidth - 32);
 const CHARTS: Record<string, number>[] = [
     {
         Rust: 10,
-        Go: 9,
-        TypeScript: 8,
-        "C/C++": 7,
-        Haskell: 6,
+        TypeScript: 9,
+        "C/C++": 8,
+        Haskell: 7,
+        Go: 6,
         Gleam: 5,
     },
     {
-        Astro: 10,
-        Svelte: 9,
+        Svelte: 10,
+        Astro: 9,
         Tailwind: 10,
         GraphQL: 9,
         tRPC: 8,
