@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "@catppuccin/tailwindcss/mocha.css";
+
+@font-face {
+    font-family: "Matrix Code NFI";
+    src: url("/fonts/matrix_code_nfi.otf") format("opentype");
+}
+
+@layer base {
+    body {
+        height: 100dvh;
+        @apply bg-ctp-base text-ctp-text;
+    }
+
+    a {
+        @apply text-ctp-blue;
+    }
+
+    code {
+        font-family: "Cascadia Code";
+        @apply text-ctp-base;
+    }
+}
+
+.h-dynamic {
+    height: 100dvh;
+}
+
+.neon {
+    text-shadow: 0 0 4px currentColor;
+}
+
+.animate-blink {
+    animation: blink 2s linear infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.rainbow-text {
+    animation: rainbow 4s infinite;
+}
+
+/* prettier-ignore */
+@keyframes rainbow {
+	0%   { color: #f5e0dc; }
+	7%   { color: #f2cdcd; }
+	14%  { color: #f5c2e7; }
+	21%  { color: #cba6f7; }
+	29%  { color: #f38ba8; }
+	36%  { color: #eba0ac; }
+	43%  { color: #fab387; }
+	50%  { color: #f9e2af; }
+	57%  { color: #a6e3a1; }
+	64%  { color: #94e2d5; }
+	71%  { color: #89dceb; }
+	79%  { color: #74c7ec; }
+	86%  { color: #89b4fa; }
+	93%  { color: #b4befe; }
+	100% { color: #f5e0dc; }
+}
+
+.desktop {
+    visibility: hidden;
+}
+
+.mobile {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 768px) {
+    .desktop {
+        visibility: visible;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mobile {
+        visibility: visible;
+    }
+}
