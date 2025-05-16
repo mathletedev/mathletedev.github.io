@@ -9,13 +9,24 @@ import { COLOURS } from "../lib/colours";
 <Base>
     <Matrix />
     <Vignette />
+
     <div class="flex h-screen">
-        <div class="m-auto">
+        <div class="m-auto flex flex-col items-center">
             <h1 id="name" class="neon mx-auto text-4xl select-none md:text-6xl">
                 <GlitchText text="Neal Wang" />
             </h1>
+
+            <div
+                class="bg-ctp-mantle border-ctp-lavender mt-8 w-96 rounded-lg border-2 px-4 py-2 text-xl opacity-90"
+            >
+                <code class="text-ctp-text">
+                    <span class="text-ctp-mauve">{"λ> "}</span>
+                    <span id="typewriter"></span>
+                </code>
+            </div>
         </div>
     </div>
+
     <a
         class="desktop fixed right-4 bottom-4"
         href="https://github.com/mathletedev/mathletedev.github.io"
@@ -27,3 +38,7 @@ import { COLOURS } from "../lib/colours";
         />
     </a>
 </Base>
+
+<script>
+    import "../lib/typewriter";
+</script>
