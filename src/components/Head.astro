@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../config";
 
 export interface Props {
@@ -12,10 +13,13 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } =
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
-<title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+
+<title>{title}</title>
+
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
 <link
     href="https://fonts.googleapis.com/css2?family=Victor+Mono:ital@0;1&display=swap"
     rel="stylesheet"
@@ -32,3 +36,5 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } =
     href=" https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.min.css "
     rel="stylesheet"
 />
+
+<ClientRouter />

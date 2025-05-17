@@ -24,15 +24,33 @@ const MESSAGES = [
     "2.7182818284",
 ];
 
-const canvas = document.querySelector("canvas")!;
-const ctx = canvas.getContext("2d")!;
+let canvas: HTMLCanvasElement;
+let ctx: CanvasRenderingContext2D;
+let SPAWN_RATE: number;
+let streams: Stream[];
+let frame = 0;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const run = () => {
+    // assert canvas exists
+    let tmp = document.querySelector("canvas");
+    if (!tmp) {
+        return;
+    }
+    canvas = tmp;
 
-ctx.font = `${CHAR_HEIGHT * 1.25}px Matrix Code NFI`;
+    ctx = canvas.getContext("2d")!;
 
-let SPAWN_RATE = canvas.width / 1920;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    ctx.font = `${CHAR_HEIGHT * 1.25}px Matrix Code NFI`;
+    SPAWN_RATE = canvas.width / 1920;
+
+    streams = [];
+    frame = 0;
+
+    requestAnimationFrame(tick);
+};
 
 window.onresize = () => {
     canvas.width = window.innerWidth;
@@ -40,8 +58,6 @@ window.onresize = () => {
 
     SPAWN_RATE = canvas.width / 2500;
 };
-
-let frame = 0;
 
 let mouse = { x: -1000, y: -1000, acc: 0 };
 
@@ -139,8 +155,6 @@ class Stream {
     }
 }
 
-const streams: Stream[] = [];
-
 let lastTick = Date.now();
 
 const tick = () => {
@@ -179,4 +193,5 @@ const tick = () => {
     }
 };
 
-requestAnimationFrame(tick);
+run();
+document.addEventListener("astro:after-swap", run);

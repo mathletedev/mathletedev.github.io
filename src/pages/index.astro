@@ -2,6 +2,7 @@
 import GlitchText from "../components/GlitchText.astro";
 import Matrix from "../components/Matrix.astro";
 import Vignette from "../components/Vignette.astro";
+import PlayIcon from "../icons/PlayIcon.astro";
 import Base from "../layouts/Base.astro";
 import { COLOURS } from "../lib/colours";
 ---
@@ -10,19 +11,30 @@ import { COLOURS } from "../lib/colours";
     <Matrix />
     <Vignette />
 
-    <div class="flex h-screen">
+    <div class="flex h-screen overflow-clip">
         <div class="m-auto flex flex-col items-center">
             <h1 id="name" class="neon mx-auto text-4xl select-none md:text-6xl">
                 <GlitchText text="Neal Wang" />
             </h1>
 
-            <div
-                class="bg-ctp-mantle border-ctp-lavender mt-8 w-96 rounded-lg border-2 px-4 py-2 text-xl opacity-90"
-            >
-                <code class="text-ctp-text">
-                    <span class="text-ctp-mauve">{"λ> "}</span>
-                    <span id="typewriter"></span>
-                </code>
+            <div class="mt-8 flex h-12 gap-4">
+                <div
+                    id="console"
+                    class="bg-ctp-mantle border-ctp-lavender flex w-96 items-center rounded-lg border-2 px-4 py-2 text-xl opacity-90 shadow-lg"
+                    transition:name="console"
+                >
+                    <code class="text-ctp-text">
+                        <span class="text-ctp-mauve">{"λ> "}</span>
+                        <span id="typewriter"></span>
+                    </code>
+                </div>
+
+                <button
+                    id="play"
+                    class="bg-ctp-lavender text-ctp-mantle hover:bg-ctp-mauve flex h-12 w-12 items-center justify-center rounded-lg opacity-90 shadow-lg transition-colors"
+                >
+                    <PlayIcon width="30" height="30" />
+                </button>
             </div>
         </div>
     </div>
@@ -39,6 +51,44 @@ import { COLOURS } from "../lib/colours";
     </a>
 </Base>
 
+<style>
+    @import "../styles/globals.css";
+
+    body {
+        @apply bg-ctp-base;
+    }
+</style>
+
+<script src="../lib/console"></script>
+
 <script>
-    import "../lib/typewriter";
+    import gsap from "gsap";
+
+    gsap.from("#name", {
+        opacity: 0,
+        delay: 0.5,
+        duration: 1,
+    });
+
+    gsap.from("#play", {
+        x: "100vw",
+        delay: 1.5,
+        duration: 1,
+        ease: "power2.out",
+    });
+
+    const init = () => {
+        const play = document.getElementById("play")!;
+        play.onclick = () => {
+            gsap.to("#play", {
+                opacity: 0,
+                duration: 0.2,
+            });
+
+            document.dispatchEvent(new Event("play"));
+        };
+    };
+
+    init();
+    document.addEventListener("astro:after-swap", init);
 </script>

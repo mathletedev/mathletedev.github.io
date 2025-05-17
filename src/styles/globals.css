@@ -9,11 +9,14 @@
 @layer base {
     body {
         height: 100dvh;
-        @apply bg-ctp-base text-ctp-text;
+    }
+
+    button {
+        @apply hover:cursor-pointer;
     }
 
     a {
-        @apply text-ctp-blue;
+        @apply text-ctp-blue hover:underline;
     }
 
     code {

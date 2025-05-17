@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base>
+    <nav class="flex justify-center px-12 pt-12 font-[Cascadia_Code]">
+        <div
+            class="bg-ctp-mantle border-ctp-lavender rounded-lg border-2 px-4 py-2 text-lg shadow-lg"
+            transition:name="console"
+        >
+            <a class="text-ctp-blue" href="/">main</a>
+            <span class="text-ctp-sky"> :: </span>
+            <button>About</button>
+            <span class="text-ctp-sky">{" -> "}</span>
+            <button>Skills</button>
+            <span class="text-ctp-sky">{" -> "}</span>
+            <button>Awards</button>
+            <span class="text-ctp-sky">{" -> "}</span>
+            <button>Awards</button>
+            <span class="text-ctp-sky">{" -> "}</span>
+            <button>Projects</button>
+            <span class="text-ctp-sky">{" -> "}</span>
+            <button>IO</button>
+            <span class="text-ctp-red">()</span>
+        </div>
+    </nav>
+</Base>
+
+<style>
+    @import "../styles/globals.css";
+
+    nav button {
+        @apply text-ctp-yellow hover:underline;
+    }
+</style>

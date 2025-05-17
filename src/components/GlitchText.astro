@@ -96,5 +96,29 @@ const { text } = Astro.props as Props;
 </style>
 
 <script>
-    import "../lib/glitch";
+    const glitches = document.querySelectorAll(".glitch");
+
+    for (const glitch of glitches) {
+        const loop = () => {
+            const delay = Math.floor(Math.random() * 2000) + 2000;
+            const child0 = glitch.children[0] as HTMLElement;
+            const child1 = glitch.children[1] as HTMLElement;
+
+            setTimeout(() => {
+                if (glitch.classList.contains("glitch")) {
+                    glitch.classList.remove("glitch");
+                    child0.style.display = "none";
+                    child1.style.display = "none";
+                } else {
+                    glitch.classList.add("glitch");
+                    child0.style.display = "";
+                    child1.style.display = "";
+                }
+
+                loop();
+            }, delay);
+        };
+
+        loop();
+    }
 </script>

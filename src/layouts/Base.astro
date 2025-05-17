@@ -1,5 +1,6 @@
 ---
 import "../styles/globals.css";
+import { fade } from "astro:transitions";
 import Head from "../components/Head.astro";
 import { SITE_TITLE } from "../config";
 
@@ -12,7 +13,7 @@ const { title, description } = Astro.props as Props;
 ---
 
 <!doctype html>
-<html lang="en-us" class="font-[Victor_Mono]">
+<html lang="en-us" class="text-ctp-text font-[Victor_Mono]">
     <head>
         <Head
             title={title ? `${title} • ${SITE_TITLE}` : undefined}
