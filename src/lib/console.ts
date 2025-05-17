@@ -1,3 +1,4 @@
+import { prefetch } from "astro:prefetch";
 import { navigate } from "astro:transitions/client";
 import gsap from "gsap";
 // @ts-ignore
@@ -58,6 +59,8 @@ document.addEventListener("play", () => {
 });
 
 const destroy = () => {
+    prefetch("/main", { ignoreSlowConnection: true });
+
     // typewriterElem.innerHTML = "";
 
     // gsap.to("#console", {
