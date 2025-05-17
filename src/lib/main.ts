@@ -56,6 +56,8 @@ const init = () => {
                     st.enable();
                 });
             }
+
+            location.href = `#${button.innerHTML.toLowerCase()}`;
         };
     }
 };
