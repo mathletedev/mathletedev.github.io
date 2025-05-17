@@ -28,8 +28,6 @@ import Panel from "../layouts/Panel.astro";
             <span class="text-ctp-sky">{" -> "}</span>
             <button>Awards</button>
             <span class="text-ctp-sky">{" -> "}</span>
-            <button>Awards</button>
-            <span class="text-ctp-sky">{" -> "}</span>
             <button>Projects</button>
             <span class="text-ctp-sky">{" -> "}</span>
             <button>IO</button>
@@ -37,18 +35,16 @@ import Panel from "../layouts/Panel.astro";
         </div>
     </nav>
 
-    <div class="panel-container overflow-x-hidden" transition:persist>
-        <div class="flex w-[900vw]">
-            <Panel image={waterDrop} />
-            <Panel image={dandelion} />
-            <Panel image={bee} />
-            <Panel image={chain} />
-            <Panel image={glasses} />
-            <Panel image={clock} />
-            <Panel image={arm} />
-            <Panel image={gears} />
-            <Panel id="io" image={lightpost} />
-        </div>
+    <div panel-container class="h-screen">
+        <Panel id="about" image={waterDrop} />
+        <Panel image={dandelion} />
+        <Panel id="skills" image={gears} />
+        <Panel image={bee} />
+        <Panel id="awards" image={clock} />
+        <Panel image={chain} />
+        <Panel id="projects" image={glasses} />
+        <Panel image={arm} />
+        <Panel id="io" image={lightpost} />
     </div>
 </Base>
 
