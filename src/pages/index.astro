@@ -11,7 +11,7 @@ import { COLOURS } from "../lib/colours";
     <Matrix />
     <Vignette />
 
-    <div class="flex h-screen overflow-clip">
+    <div class="flex h-screen overflow-hidden">
         <div class="m-auto flex flex-col items-center">
             <h1 id="name" class="neon mx-auto text-4xl select-none md:text-6xl">
                 <GlitchText text="Neal Wang" />
@@ -78,7 +78,11 @@ import { COLOURS } from "../lib/colours";
     });
 
     const init = () => {
-        const play = document.getElementById("play")!;
+        const play = document.getElementById("play");
+        if (!play) {
+            return;
+        }
+
         play.onclick = () => {
             gsap.to("#play", {
                 opacity: 0,

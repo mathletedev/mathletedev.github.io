@@ -1,9 +1,21 @@
 ---
+import arm from "../images/arm.png";
+import bee from "../images/bee.png";
+import chain from "../images/chain.png";
+import clock from "../images/clock.png";
+import dandelion from "../images/dandelion.png";
+import gears from "../images/gears.png";
+import glasses from "../images/glasses.png";
+import lightpost from "../images/lightpost.png";
+import waterDrop from "../images/water_drop.png";
 import Base from "../layouts/Base.astro";
+import Panel from "../layouts/Panel.astro";
 ---
 
 <Base>
-    <nav class="flex justify-center px-12 pt-12 font-[Cascadia_Code]">
+    <nav
+        class="fixed top-0 left-0 z-10 flex w-screen justify-center px-12 pt-12 font-[Cascadia_Code]"
+    >
         <div
             class="bg-ctp-mantle border-ctp-lavender rounded-lg border-2 px-4 py-2 text-lg shadow-lg"
             transition:name="console"
@@ -24,6 +36,20 @@ import Base from "../layouts/Base.astro";
             <span class="text-ctp-red">()</span>
         </div>
     </nav>
+
+    <div class="panel-container overflow-x-hidden" transition:persist>
+        <div class="flex w-[900vw]">
+            <Panel image={waterDrop} />
+            <Panel image={dandelion} />
+            <Panel image={bee} />
+            <Panel image={chain} />
+            <Panel image={glasses} />
+            <Panel image={clock} />
+            <Panel image={arm} />
+            <Panel image={gears} />
+            <Panel id="io" image={lightpost} />
+        </div>
+    </div>
 </Base>
 
 <style>
@@ -33,3 +59,5 @@ import Base from "../layouts/Base.astro";
         @apply text-ctp-yellow hover:underline;
     }
 </style>
+
+<script src="../lib/main.ts"></script>

@@ -1,0 +1,19 @@
+---
+import { ImageMetadata } from "astro";
+
+export interface Props {
+    id?: string;
+    image: ImageMetadata;
+}
+
+const { id, image } = Astro.props;
+---
+
+<div id={id} class="panel">
+    <img
+        src={image.src}
+        class="h-screen w-screen object-cover object-center brightness-30"
+    />
+
+    <slot />
+</div>
