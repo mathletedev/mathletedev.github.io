@@ -13,7 +13,7 @@ const init = () => {
     const panels = gsap.utils.toArray(".panel");
     const sts: ScrollTrigger[] = [];
 
-    panels.forEach((panel, i) => {
+    panels.forEach((panel, _) => {
         const st = ScrollTrigger.create({
             trigger: panel as gsap.DOMTarget,
             start: "top top",

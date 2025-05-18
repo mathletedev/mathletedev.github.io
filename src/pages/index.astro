@@ -1,5 +1,5 @@
 ---
-import GlitchText from "../components/GlitchText.astro";
+import Glitch from "../components/Glitch.svelte";
 import Matrix from "../components/Matrix.astro";
 import Vignette from "../components/Vignette.astro";
 import PlayIcon from "../icons/PlayIcon.astro";
@@ -13,8 +13,8 @@ import { COLOURS } from "../lib/colours";
 
     <div class="flex h-screen overflow-hidden">
         <div class="m-auto flex flex-col items-center">
-            <h1 id="name" class="neon mx-auto text-4xl select-none md:text-6xl">
-                <GlitchText text="Neal Wang" />
+            <h1 id="name" class="mx-auto">
+                <Glitch client:load />
             </h1>
 
             <div class="mt-8 flex h-12 gap-4">

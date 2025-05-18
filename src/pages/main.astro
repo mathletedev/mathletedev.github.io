@@ -6,10 +6,10 @@ import clock from "../images/clock.png";
 import dandelion from "../images/dandelion.png";
 import gears from "../images/gears.png";
 import glasses from "../images/glasses.png";
-import lightpost from "../images/lightpost.png";
 import waterDrop from "../images/water_drop.png";
 import Base from "../layouts/Base.astro";
 import Panel from "../layouts/Panel.astro";
+import IOPanel from "../panels/IOPanel.astro";
 ---
 
 <Base>
@@ -44,7 +44,7 @@ import Panel from "../layouts/Panel.astro";
         <Panel image={chain} />
         <Panel id="projects" image={glasses} />
         <Panel image={arm} />
-        <Panel id="io" image={lightpost} />
+        <IOPanel />
     </div>
 </Base>
 

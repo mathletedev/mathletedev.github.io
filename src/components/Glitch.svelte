@@ -1,17 +1,36 @@
----
-export interface Props {
-    text: string;
-}
+<script lang="ts">
+    import { onMount } from "svelte";
 
-const { text } = Astro.props as Props;
----
+    let glitched = false;
+    let text = "";
+    $: text = glitched ? "『王诗朗』" : "Neal Wang";
+
+    const loop = () => {
+        const delay = Math.floor(Math.random() * 2000) + 2000;
+
+        setTimeout(() => {
+            glitched = !glitched;
+            loop();
+        }, delay);
+    };
+
+    onMount(loop);
+</script>
 
 <!-- source: https://codepen.io/cbanlawi/pen/xxRBeMY -->
-<p class="glitch">
-    <span aria-hidden="true">{text}</span>
-    {text}
-    <span aria-hidden="true">{text}</span>
-</p>
+<div class="flex h-16 items-center">
+    <p
+        class={`select-none ${glitched ? "glitch font-[Zhi_Mang_Xing] text-6xl md:text-8xl" : "neon text-4xl md:text-6xl"}`}
+    >
+        {#if glitched}
+            <span aria-hidden="true">{text}</span>
+        {/if}
+        {text}
+        {#if glitched}
+            <span aria-hidden="true">{text}</span>
+        {/if}
+    </p>
+</div>
 
 <style>
     :root {
@@ -94,31 +113,3 @@ const { text } = Astro.props as Props;
         }
     }
 </style>
-
-<script>
-    const glitches = document.querySelectorAll(".glitch");
-
-    for (const glitch of glitches) {
-        const loop = () => {
-            const delay = Math.floor(Math.random() * 2000) + 2000;
-            const child0 = glitch.children[0] as HTMLElement;
-            const child1 = glitch.children[1] as HTMLElement;
-
-            setTimeout(() => {
-                if (glitch.classList.contains("glitch")) {
-                    glitch.classList.remove("glitch");
-                    child0.style.display = "none";
-                    child1.style.display = "none";
-                } else {
-                    glitch.classList.add("glitch");
-                    child0.style.display = "";
-                    child1.style.display = "";
-                }
-
-                loop();
-            }, delay);
-        };
-
-        loop();
-    }
-</script>
