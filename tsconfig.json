@@ -8,14 +8,14 @@
         "moduleResolution": "bundler",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true
+        "noUncheckedSideEffectImports": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "skipLibCheck": true,
         "strict": true,
         "target": "ES2020",
         "useDefineForClassFields": true,
-        "verbatimModuleSyntax": true,
+        "verbatimModuleSyntax": true
     },
     "include": ["src"]
 }
