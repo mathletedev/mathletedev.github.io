@@ -2,9 +2,15 @@
     const { children } = $props();
 </script>
 
-<div class="relative inline-block text-8xl tracking-wider">
-    <span class="soft-shadow font-title absolute">{@render children()}</span>
-    <span class="metallic font-title relative">{@render children()}</span>
+<div class="relative inline-block tracking-wider">
+    <span
+        class="soft-shadow font-rocket-rinder absolute animate-pulse select-none"
+    >
+        {@render children()}
+    </span>
+    <span class="metallic font-rocket-rinder relative select-none">
+        {@render children()}
+    </span>
 </div>
 
 <style>

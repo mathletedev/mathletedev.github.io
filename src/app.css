@@ -4,7 +4,8 @@
 }
 
 @theme {
-    --font-title: "Rocket Rinder", "sans-serif";
+    --font-rocket-rinder: "Rocket Rinder", "sans-serif";
+    --font-streamster: "Streamster", "sans-serif";
 }
 
 @source "../node_modules/flowbite-svelte/dist";
@@ -12,4 +13,8 @@
 @font-face {
     font-family: "Rocket Rinder";
     src: url("./assets/fonts/Rocket Rinder.otf");
+}
+@font-face {
+    font-family: "Streamster";
+    src: url("./assets/fonts/Streamster.ttf");
 }
