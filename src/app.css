@@ -2,3 +2,14 @@
 @plugin "daisyui" {
     themes: synthwave --default;
 }
+
+@theme {
+    --font-title: "Rocket Rinder", "sans-serif";
+}
+
+@source "../node_modules/flowbite-svelte/dist";
+
+@font-face {
+    font-family: "Rocket Rinder";
+    src: url("./assets/fonts/Rocket Rinder.otf");
+}

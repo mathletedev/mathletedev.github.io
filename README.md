@@ -1,3 +1,7 @@
+# mathletedev
+
+> Neal Wang's portfolio website
+
 ## Sources
 
-- [Synthwave colour palette](https://www.reddit.com/r/outrun/comments/zf7dfo/synthwave_color_palette_this_work_of_art_is_not/)
+- Synthwave fonts: https://graphicpie.com/best-synthwave-fonts

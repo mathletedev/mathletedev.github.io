@@ -13,6 +13,8 @@
         "@lucide/svelte": "^0.515.0",
         "@tailwindcss/vite": "^4.1.10",
         "@threlte/core": "^8.0.5",
+        "daisyui": "^5.0.43",
+        "gsap": "^3.13.0",
         "tailwindcss": "^4.1.10",
         "vite-tsconfig-paths": "^5.1.4"
     },
@@ -21,7 +23,6 @@
         "@sveltejs/vite-plugin-svelte": "^5.0.3",
         "@tsconfig/svelte": "^5.0.4",
         "@types/bun": "^1.2.16",
-        "daisyui": "^5.0.43",
         "prettier": "^3.5.3",
         "prettier-plugin-svelte": "^3.4.0",
         "prettier-plugin-tailwindcss": "^0.6.12",
