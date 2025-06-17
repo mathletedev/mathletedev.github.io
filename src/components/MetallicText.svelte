@@ -2,7 +2,7 @@
     const { children } = $props();
 </script>
 
-<div class="relative inline-block tracking-wider">
+<div class="relative inline-block tracking-wide">
     <span
         class="soft-shadow font-rocket-rinder absolute animate-pulse select-none"
     >

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import MetallicText from "./MetallicText.svelte";
 
     const TEXT = "『王诗朗』";
 
@@ -21,7 +20,7 @@
 <!-- source: https://codepen.io/cbanlawi/pen/xxRBeMY -->
 <div class="h-16">
     {#if glitched}
-        <h1 class="flex items-center">
+        <sub class="mt-4 flex items-center">
             <p
                 class="glitch text-primary font-[Zhi_Mang_Xing] text-2xl select-none md:text-7xl"
             >
@@ -29,7 +28,7 @@
                 {TEXT}
                 <span aria-hidden="true">{TEXT}</span>
             </p>
-        </h1>
+        </sub>
     {:else}
         <sub class="font-streamster text-secondary sub-glow text-6xl">
             Software Engineer
