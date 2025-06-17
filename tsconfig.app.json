@@ -19,7 +19,10 @@
         "baseUrl": "src",
         "paths": {
             "$components/*": ["components/*"],
-            "$lib/*": ["lib/*"]
+            "$lib/*": ["lib/*"],
+            "$scenes/*": ["scenes/*"],
+            "$shaders/*": ["shaders/*"],
+            "$views/*": ["views/*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]

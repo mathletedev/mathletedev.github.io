@@ -1,9 +1,7 @@
 <script lang="ts">
-    import Hero from "$components/Hero.svelte";
-    import Synthwave from "$components/Synthwave.svelte";
+    import Hero from "$views/Hero.svelte";
 </script>
 
 <main>
     <Hero />
-    <Synthwave />
 </main>

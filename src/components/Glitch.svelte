@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
     const TEXT = "『王诗朗』";
 
     let glitched = $state(false);
@@ -14,13 +12,15 @@
         }, delay);
     };
 
-    onMount(loop);
+    $effect(() => {
+        loop();
+    });
 </script>
 
 <!-- source: https://codepen.io/cbanlawi/pen/xxRBeMY -->
 <div class="h-16">
     {#if glitched}
-        <sub class="mt-4 flex items-center">
+        <sub class="flex items-center pt-4">
             <p
                 class="glitch text-primary font-[Zhi_Mang_Xing] text-2xl select-none md:text-7xl"
             >
