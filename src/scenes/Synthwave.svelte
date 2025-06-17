@@ -3,26 +3,26 @@
     import { TAU } from "$lib/constants";
     import fragmentShader from "$shaders/grid.frag.glsl?raw";
     import vertexShader from "$shaders/grid.vert.glsl?raw";
-    import { ShaderMaterial, Vector2 } from "three";
+    import { ShaderMaterial } from "three";
 
     let time = $state(0);
     let material = $state(
         new ShaderMaterial({
             fragmentShader,
             vertexShader,
+            transparent: true,
             uniforms: {
-                iTime: { value: 0 },
-                iResolution: { value: new Vector2(innerWidth, innerHeight) },
+                uTime: { value: 0 },
             },
         }),
     );
 
     useTask((delta) => {
         time += delta;
-        material.uniforms.iTime.value = time;
+        material.uniforms.uTime.value = time;
     });
 </script>
 
-<T.Mesh position.y={-4} {material}>
-    <T.PlaneGeometry args={[10, 10]} />
+<T.Mesh position.y={-1} rotation.x={TAU * -0.24} {material}>
+    <T.PlaneGeometry args={[30, 10]} />
 </T.Mesh>

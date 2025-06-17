@@ -1,32 +1,32 @@
-uniform float iTime;
-uniform vec2 iResolution;
+uniform float uTime;
 varying vec2 vUv;
 
 float grid(vec2 uv) {
-	vec2 size = vec2(uv.y, uv.y * uv.y * 0.2) * 0.01;
-	uv += vec2(0.0, iTime * 4.0);
-	uv = abs(fract(uv) - 0.5);
-	vec2 lines = smoothstep(size, vec2(0.0), uv);
-	lines += smoothstep(size * 5.0, vec2(0.0), uv) * 0.4;
-	return clamp(lines.x + lines.y, 0.0, 3.0);
+    float rowDensity = 12.0;
+    float colDensity = 4.0;
+    vec2 lineThickness = vec2(0.03);
+
+	uv += 0.5;
+    uv.x *= rowDensity;
+	uv.y *= colDensity;
+    uv.y += uTime * 4.0;
+    uv = abs(fract(uv) - 0.5);
+
+    vec2 lines = smoothstep(lineThickness, vec2(0.0), uv);
+    return clamp(lines.x + lines.y, 0.0, 1.0);
 }
 
 void main() {
-	vec2 fragCoord = vUv * iResolution;
-	vec2 uv = (2.0 * fragCoord.xy - iResolution.xy) / iResolution.y;
-	float horizon = -0.9;
+    vec2 uv = vUv;
+	uv -= 0.5;
 
-	float fog = smoothstep(0.2, -0.05, abs(uv.y + horizon));
-	vec3 col = vec3(0.0, 0.1, 0.2);
-	if (uv.y < -horizon) {
-		uv.y = 3.0 / (abs(uv.y + horizon) + 0.05);
-		uv.x *= uv.y * 1.0;
-		float gridVal = grid(uv);
-		col = mix(col, vec3(1.0, 0.25, 0.5), gridVal);
-	}
+    float gridVal = grid(uv);
+	float fade = smoothstep(0.5, -0.5, uv.y);
 
-	col += fog * fog * fog;
-	col = mix(vec3(0.75, 0.1, 0.45) * 0.2, col, 0.7);
+    vec3 baseCol = vec3(0.035, 0, 0.184);
+	vec3 gridCol = vec3(0.44, 0.82, 1);
 
-	gl_FragColor = vec4(col, 1.0);
+    vec3 col = mix(baseCol, gridCol, gridVal);
+
+    gl_FragColor = vec4(col, fade);
 }
