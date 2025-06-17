@@ -8,9 +8,9 @@
     $effect(() => {
         const tl = gsap.timeline();
         tl.from("#title", { opacity: 0, duration: 1, ease: "power1.out" });
-        tl.from("#glitch", { opacity: 0, duration: 1, ease: "power1.out" });
         tl.delay(1);
         tl.from("#title", { y: "25vh", duration: 2, ease: "power2.out" });
+        tl.from("#glitch", { opacity: 0, duration: 1, ease: "power1.out" });
         tl.from("#synthwave", {
             opacity: 0,
             duration: 3,

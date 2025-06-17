@@ -13,7 +13,9 @@
     };
 
     $effect(() => {
-        loop();
+        setTimeout(() => {
+            loop();
+        }, 4000);
     });
 </script>
 

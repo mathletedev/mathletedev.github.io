@@ -23,7 +23,7 @@ void main() {
     float gridVal = grid(uv);
 	float fade = smoothstep(0.5, -0.5, uv.y);
 
-    vec3 baseCol = vec3(0.035, 0, 0.184);
+    vec3 baseCol = vec3(0.02, 0, 0.05);
 	vec3 gridCol = vec3(0.44, 0.82, 1);
 
     vec3 col = mix(baseCol, gridCol, gridVal);
