@@ -13,6 +13,7 @@
         "@lucide/svelte": "^0.515.0",
         "@tailwindcss/vite": "^4.1.10",
         "@threlte/core": "^8.0.5",
+        "@threlte/extras": "^9.3.0",
         "daisyui": "^5.0.43",
         "gsap": "^3.13.0",
         "tailwindcss": "^4.1.10",
