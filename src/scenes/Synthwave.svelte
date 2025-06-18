@@ -47,10 +47,10 @@
     });
 </script>
 
-<T.Mesh position.y={0.5} position.z={-10} material={sunMaterial}>
+<T.Mesh position.y={0} position.z={-10} material={sunMaterial}>
     <T.PlaneGeometry args={[20, 20]} />
 </T.Mesh>
 
-<T.Mesh position.y={-1.5} rotation.x={TAU * -0.24} material={gridMaterial}>
+<T.Mesh position.y={-1.5} rotation.x={TAU * -0.245} material={gridMaterial}>
     <T.PlaneGeometry args={[30, 10]} />
 </T.Mesh>

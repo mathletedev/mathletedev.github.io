@@ -3,7 +3,9 @@ uniform vec2 uResolution;
 uniform sampler2D uTexture;
 varying vec2 vUv;
 
+const float SPEED = 3.0;
 const float CUTOFF = 0.4;
+const float SOLID = 0.6;
 const vec3 GLOW_COL = vec3(0.96, 0.19, 0.6);
 
 float easeOut(float t) {
@@ -31,7 +33,15 @@ void main() {
 
 	vec4 texCol = blur(uTexture, uv, uResolution, vec2(0.0, 2.5));
 
-	float lines = 1.0 - max(sin(uv.y * 160.0 + uTime * 1.5), 0.0);
+	float lines;
+	if (uv.y > SOLID) {
+		lines = 1.0;
+	} else {
+		lines = 1.0 - max(sin(uv.y * 160.0 - uTime * SPEED), 0.0);
+		lines += clamp((uv.y - CUTOFF) / (SOLID - CUTOFF), 0.0, 1.0) * 2.0 - 1.0;
+		lines = min(lines, 1.0);
+	}
+
 	float falloff = uv.y < CUTOFF ? 0.0 : easeOut(1.0 - (1.0 - uv.y) / (1.0 - CUTOFF));
     float glow = smoothstep(0.8, 0.4, uv.y);
 
