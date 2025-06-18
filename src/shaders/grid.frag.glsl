@@ -2,8 +2,8 @@ uniform float uTime;
 varying vec2 vUv;
 
 const float SPEED = 3.0;
-const float ROW_DENSITY = 12.0;
-const float COL_DENSITY = 6.0;
+const float ROW_DENSITY = 10.0;
+const float COL_DENSITY = 20.0;
 const float LINE_THICKNESS = 0.03;
 const vec3 BASE_COL = vec3(0.02, 0, 0.05);
 const vec3 GRID_COL = vec3(0.44, 0.82, 1);
@@ -12,8 +12,8 @@ float grid(vec2 uv) {
     vec2 lineThickness = vec2(LINE_THICKNESS);
 
 	uv += 0.5;
-    uv.x *= ROW_DENSITY;
-	uv.y *= COL_DENSITY;
+    uv.x *= COL_DENSITY;
+	uv.y *= ROW_DENSITY;
     uv.y += uTime * SPEED;
     uv = abs(fract(uv) - 0.5);
 
@@ -26,7 +26,7 @@ void main() {
 	uv -= 0.5;
 
     float gridVal = grid(uv);
-	float fade = smoothstep(0.5, -0.5, uv.y);
+	float fade = smoothstep(0.5, -0.5, uv.y) * 0.75;
 
     vec3 col = mix(BASE_COL, GRID_COL, gridVal);
 
