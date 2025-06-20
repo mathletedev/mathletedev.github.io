@@ -12,15 +12,16 @@
     import * as THREE from "three";
     import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
 
-    const PEAK_DECAY = 8;
     // in seconds
     const MP_OFFSET = 0.2;
+    const PEAK_DECAY = 8;
     // in units per second
     const NOTE_SPEED = 10;
     // in units
-    const NOTE_SPAWN_DISTANCE = 5;
+    const NOTE_SPAWN_DISTANCE = 10;
     // in seconds
     const NOTE_SPAWN_OFFSET = NOTE_SPAWN_DISTANCE / NOTE_SPEED;
+    const NOTE_PEAK_DECAY = 4;
 
     const { scene, camera, renderer, renderStage } = useThrelte();
 
@@ -68,9 +69,9 @@
         /* composer.addPass(
             new UnrealBloomPass(
                 new THREE.Vector2(innerWidth, innerHeight),
-                0.8,
-                1.5,
+                1,
                 0.2,
+                1,
             ),
         ); */
     });
@@ -126,7 +127,7 @@
             );
             prevNotePeak = nextPeak;
         } else {
-            prevNotePeak += (nextPeak - prevNotePeak) * PEAK_DECAY * delta;
+            prevNotePeak += (nextPeak - prevNotePeak) * NOTE_PEAK_DECAY * delta;
         }
     });
 
@@ -149,12 +150,16 @@
 
 <T.Group position.y={-1.1} rotation.x={TAU * -0.25}>
     {#each notes as note}
-        <T.Mesh position={[note.x, -3 + note.y, 0.1]}>
-            <T.SphereGeometry args={[0.1, 8, 8]} />
-            <T.MeshPhongMaterial
-                emissive="#0000ff"
-                emissiveIntensity={(peak / 100) * 10}
+        <T.Mesh position={[note.x, -3.5 + note.y, 0.1]}>
+            <T.SphereGeometry
+                args={[
+                    (0.05 * (NOTE_SPAWN_DISTANCE - note.y)) /
+                        NOTE_SPAWN_DISTANCE,
+                    16,
+                    16,
+                ]}
             />
+            <T.MeshPhongMaterial emissive="indigo" emissiveIntensity={10} />
         </T.Mesh>
     {/each}
     <T.Mesh material={gridMaterial}>

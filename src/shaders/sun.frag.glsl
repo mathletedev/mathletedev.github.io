@@ -8,10 +8,14 @@ const float SPEED = 3.0;
 const float CUTOFF = 0.4;
 const float SOLID = 0.6;
 const vec3 SAT_COL = vec3(0.96, 0.19, 0.6);
-const float PEAK_MULT = 1.8;
+const float PEAK_MULT = 1.5;
 
 float easeOut(float t) {
 	return 1.0 - (1.0 - t) * (1.0 - t) * (1.0 - t);
+}
+
+float rampUp(float t) {
+	return pow(t, 1.5);
 }
 
 // https://github.com/Experience-Monks/glsl-fast-gaussian-blur
@@ -53,5 +57,5 @@ void main() {
 
     vec3 col = mix(base.rgb, SAT_COL, sat);
 
-    gl_FragColor = vec4(col * (0.5 + uPeak / 100.0 * PEAK_MULT), base.a * lines * falloff);
+    gl_FragColor = vec4(col * (0.5 + rampUp(uPeak / 100.0) * PEAK_MULT), base.a * lines * falloff);
 }

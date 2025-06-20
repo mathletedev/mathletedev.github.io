@@ -33,7 +33,7 @@
         </sub>
     {:else}
         <sub
-            class="font-streamster text-secondary sub-glow text-3xl sm:text-5xl md:text-6xl"
+            class="font-streamster text-secondary sub-glow text-3xl select-none sm:text-5xl md:text-6xl"
         >
             Software Engineer
         </sub>
