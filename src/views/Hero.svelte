@@ -27,7 +27,7 @@
 
 <div class="flex h-screen flex-col items-center">
     <div id="title" class="mt-[20vh] flex flex-col items-center">
-        <h1 class="mb-[-0.4em] text-8xl">
+        <h1 class="mb-[-0.4em] text-5xl sm:text-7xl md:text-8xl">
             <MetallicText>Neal Wang</MetallicText>
         </h1>
         <div id="glitch">

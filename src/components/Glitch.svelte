@@ -22,9 +22,9 @@
 <!-- source: https://codepen.io/cbanlawi/pen/xxRBeMY -->
 <div class="h-16">
     {#if glitched}
-        <sub class="flex items-center pt-4">
+        <sub class="flex items-center pt-2 md:pt-4">
             <p
-                class="glitch text-primary font-[Zhi_Mang_Xing] text-2xl select-none md:text-7xl"
+                class="glitch text-primary font-[Zhi_Mang_Xing] text-4xl select-none sm:text-6xl md:text-7xl"
             >
                 <span aria-hidden="true">{TEXT}</span>
                 {TEXT}
@@ -32,7 +32,9 @@
             </p>
         </sub>
     {:else}
-        <sub class="font-streamster text-secondary sub-glow text-6xl">
+        <sub
+            class="font-streamster text-secondary sub-glow text-3xl sm:text-5xl md:text-6xl"
+        >
             Software Engineer
         </sub>
     {/if}
