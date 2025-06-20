@@ -19,7 +19,7 @@
     });
 </script>
 
-<div id="synthwave" class="fixed top-0 h-screen w-screen">
+<div id="synthwave" class="fixed top-0 z-[-10] h-screen w-screen">
     <Canvas>
         <Synthwave />
     </Canvas>

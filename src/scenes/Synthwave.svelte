@@ -2,7 +2,8 @@
     import { T, useTask, useThrelte } from "@threlte/core";
     import sunURL from "$assets/sun.png";
     import { TAU } from "$lib/constants";
-    import { musicPlayer } from "$lib/shared.svelte";
+    import { getPeak } from "$lib/music";
+    import { mp } from "$lib/shared.svelte";
     import gridFragmentShader from "$shaders/grid.frag.glsl?raw";
     import gridVertexShader from "$shaders/grid.vert.glsl?raw";
     import sunFragmentShader from "$shaders/sun.frag.glsl?raw";
@@ -12,11 +13,13 @@
     import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
 
     const PEAK_DECAY = 8;
+    const MP_OFFSET = 0.1;
 
     const { scene, camera, renderer, renderStage } = useThrelte();
 
     let time = $state(0);
     let composer: EffectComposer | null = $state(null);
+    let peak = $state(0);
 
     let gridMaterial = $state(
         new THREE.ShaderMaterial({
@@ -62,20 +65,31 @@
         ); */
     });
 
-    let prevPeak = 0;
     useTask((delta) => {
         time += delta;
         gridMaterial.uniforms.uTime.value = time;
         sunMaterial.uniforms.uTime.value = time;
 
-        if (musicPlayer.peak > prevPeak) {
-            prevPeak = musicPlayer.peak;
-        } else {
-            prevPeak += (musicPlayer.peak - prevPeak) * PEAK_DECAY * delta;
+        if (!mp.audioEl) {
+            return;
         }
 
-        gridMaterial.uniforms.uPeak.value = prevPeak;
-        sunMaterial.uniforms.uPeak.value = prevPeak;
+        let nextPeak = 0;
+        if (!mp.paused) {
+            nextPeak = getPeak(mp.audioEl.currentTime + MP_OFFSET);
+            if (nextPeak === -1) {
+                return;
+            }
+        }
+
+        if (nextPeak > peak) {
+            peak = nextPeak;
+        } else {
+            peak += (nextPeak - peak) * PEAK_DECAY * delta;
+        }
+
+        gridMaterial.uniforms.uPeak.value = peak;
+        sunMaterial.uniforms.uPeak.value = peak;
     });
 
     useTask(
@@ -89,7 +103,7 @@
 </script>
 
 <T.Mesh position.y={0} position.z={-10} material={sunMaterial}>
-    <T.PlaneGeometry args={[20, 20]} />
+    <T.PlaneGeometry args={[20 + peak / 100, 20 + peak / 100]} />
 </T.Mesh>
 
 <T.Mesh position.y={-1.1} rotation.x={TAU * -0.25} material={gridMaterial}>

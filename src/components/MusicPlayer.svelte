@@ -1,48 +1,90 @@
 <script lang="ts">
+    import { Info, Music, Pause, Play, StepForward } from "@lucide/svelte";
     import { getRandomTrack } from "$lib/music";
-    import { musicPlayer } from "$lib/shared.svelte";
+    import { mp } from "$lib/shared.svelte";
+    import { onMount } from "svelte";
+
+    const START_DELAY = 6000;
+    const TOAST_TIME = 4000;
 
     let modalEl: HTMLDialogElement | null = $state(null);
     let audioEl: HTMLAudioElement | null = $state(null);
-    let playing = $state(false);
     let track: any = $state(null);
+    let showControls = $state(false);
+    let showToast = $state(false);
 
-    $effect(() => {
-        (async () => {
-            track = await getRandomTrack();
-        })();
+    // use onMount to avoid infinite querying
+    onMount(() => {
+        play();
+
+        setTimeout(() => {
+            if (modalEl && audioEl && audioEl.paused) {
+                modalEl.showModal();
+            }
+
+            showControls = true;
+        }, START_DELAY);
     });
 
     $effect(() => {
-        if (!playing && modalEl) {
-            modalEl.showModal();
+        mp.audioEl = audioEl;
+    });
+
+    $effect(() => {
+        if (mp.paused) {
+            audioEl?.pause();
+        } else {
+            audioEl?.play();
         }
     });
 
-    const visualise = () => {
+    $effect(() => {
+        if (audioEl && audioEl.paused) {
+            mp.paused = false;
+        }
+    });
+
+    const nextTrack = async () => {
+        track = await getRandomTrack();
+        if (audioEl) {
+            audioEl.src = track.audio;
+        }
+    };
+
+    const toast = () => {
+        showToast = true;
+        setTimeout(() => {
+            showToast = false;
+        }, TOAST_TIME);
+    };
+
+    const play = async () => {
+        await nextTrack();
+
+        mp.paused = false;
+        modalEl?.close();
+
+        toast();
+    };
+
+    const togglePaused = () => {
         if (!audioEl) {
             return;
         }
 
-        const waveform = JSON.parse(track.waveform).peaks;
-        const interval = audioEl.duration / waveform.length;
+        if (audioEl.paused) {
+            mp.paused = false;
+        } else {
+            mp.paused = true;
+        }
+    };
 
-        let prevI = 0;
-        const loop = () => {
-            if (!audioEl) {
-                return;
-            }
+    const start = () => {
+        if (!audioEl) {
+            return;
+        }
 
-            const i = Math.floor(audioEl.currentTime / interval);
-
-            if (i !== prevI && i < waveform.length) {
-                musicPlayer.peak = waveform[i];
-            }
-
-            requestAnimationFrame(loop);
-        };
-
-        loop();
+        mp.waveform = JSON.parse(track.waveform).peaks;
     };
 </script>
 
@@ -51,21 +93,50 @@
         <h3 class="text-lg font-bold">Aw snap! Audio playback is disabled</h3>
         <p class="py-4">Click the button below to start jamming!</p>
         <div class="modal-action">
-            <form method="dialog" onsubmit={() => audioEl?.play()}>
+            <form method="dialog" onsubmit={play}>
                 <button class="btn btn-primary">Play!</button>
             </form>
         </div>
     </div>
 </dialog>
 
-<audio
-    autoplay
-    bind:this={audioEl}
-    onloadedmetadata={visualise}
-    onplay={() => (playing = true)}
-    onended={() => (playing = false)}
->
-    {#if track}
-        <source src={track.audio} type="audio/mp3" />
+{#if showControls}
+    <div class="fixed top-4 left-4">
+        <div
+            class="tooltip tooltip-bottom"
+            data-tip={mp.paused ? "Play" : "Pause"}
+        >
+            <button
+                class="btn btn-soft btn-primary px-2"
+                onclick={togglePaused}
+            >
+                {#if mp.paused}<Play />{:else}<Pause />{/if}
+            </button>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Skip track">
+            <button class="btn btn-soft btn-primary px-2" onclick={play}>
+                <StepForward />
+            </button>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Track info">
+            <button class="btn btn-soft btn-primary px-2" onclick={toast}>
+                <Info />
+            </button>
+        </div>
+    </div>
+
+    {#if showToast}
+        <div class="toast">
+            <div class="alert alert-info">
+                <Music />
+                <div>
+                    <span class="font-bold">[{track.artist_name}]</span>
+                    {track.name}
+                </div>
+            </div>
+        </div>
     {/if}
-</audio>
+{/if}
+
+<audio autoplay bind:this={audioEl} onloadedmetadata={start} onended={play}
+></audio>
