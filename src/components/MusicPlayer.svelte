@@ -101,7 +101,12 @@
 </dialog>
 
 {#if showControls}
-    <div class="fixed top-4 left-4">
+    <div class="fixed top-4 flex w-screen justify-center gap-4">
+        <div class="tooltip tooltip-bottom" data-tip="Track info">
+            <button class="btn btn-soft btn-primary px-2" onclick={toast}>
+                <Info />
+            </button>
+        </div>
         <div
             class="tooltip tooltip-bottom"
             data-tip={mp.paused ? "Play" : "Pause"}
@@ -116,11 +121,6 @@
         <div class="tooltip tooltip-bottom" data-tip="Skip track">
             <button class="btn btn-soft btn-primary px-2" onclick={play}>
                 <StepForward />
-            </button>
-        </div>
-        <div class="tooltip tooltip-bottom" data-tip="Track info">
-            <button class="btn btn-soft btn-primary px-2" onclick={toast}>
-                <Info />
             </button>
         </div>
     </div>
