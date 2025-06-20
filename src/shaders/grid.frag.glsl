@@ -1,4 +1,5 @@
 uniform float uTime;
+uniform float uPeak;
 varying vec2 vUv;
 
 const float SPEED = 3.0;
@@ -7,6 +8,7 @@ const float COL_DENSITY = 20.0;
 const float LINE_THICKNESS = 0.03;
 const vec3 BASE_COL = vec3(0.02, 0, 0.05);
 const vec3 GRID_COL = vec3(0.44, 0.82, 1);
+const float PEAK_MULT = 1.5;
 
 float grid(vec2 uv) {
     vec2 lineThickness = vec2(LINE_THICKNESS);
@@ -30,5 +32,5 @@ void main() {
 
     vec3 col = mix(BASE_COL, GRID_COL, gridVal);
 
-    gl_FragColor = vec4(col, fade);
+    gl_FragColor = vec4(col * (0.2 + uPeak / 100.0 * PEAK_MULT), fade);
 }

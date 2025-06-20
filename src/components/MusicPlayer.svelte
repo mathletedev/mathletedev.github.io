@@ -1,15 +1,22 @@
 <script lang="ts">
     import { getRandomTrack } from "$lib/music";
+    import { musicPlayer } from "$lib/shared.svelte";
 
+    let modalEl: HTMLDialogElement | null = $state(null);
     let audioEl: HTMLAudioElement | null = $state(null);
     let playing = $state(false);
     let track: any = $state(null);
-    let bgColour = $state("#000000");
 
     $effect(() => {
         (async () => {
             track = await getRandomTrack();
         })();
+    });
+
+    $effect(() => {
+        if (!playing && modalEl) {
+            modalEl.showModal();
+        }
     });
 
     const visualise = () => {
@@ -29,10 +36,7 @@
             const i = Math.floor(audioEl.currentTime / interval);
 
             if (i !== prevI && i < waveform.length) {
-                const peak = waveform[i];
-                bgColour = `rgb(0, 0, ${(peak / 100) * 255})`;
-
-                prevI = i;
+                musicPlayer.peak = waveform[i];
             }
 
             requestAnimationFrame(loop);
@@ -42,20 +46,17 @@
     };
 </script>
 
-{#if !playing}
-    <div
-        class="absolute z-10 flex h-screen w-screen items-center justify-center"
-    >
-        <button class="btn btn-primary" onclick={() => audioEl?.play()}
-            >Play!</button
-        >
+<dialog class="modal" bind:this={modalEl}>
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Aw snap! Audio playback is disabled</h3>
+        <p class="py-4">Click the button below to start jamming!</p>
+        <div class="modal-action">
+            <form method="dialog" onsubmit={() => audioEl?.play()}>
+                <button class="btn btn-primary">Play!</button>
+            </form>
+        </div>
     </div>
-{/if}
-
-<div
-    class="absolute z-10 h-4 w-screen"
-    style="background-color: {bgColour}"
-></div>
+</dialog>
 
 <audio
     autoplay

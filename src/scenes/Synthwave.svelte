@@ -2,6 +2,7 @@
     import { T, useTask, useThrelte } from "@threlte/core";
     import sunURL from "$assets/sun.png";
     import { TAU } from "$lib/constants";
+    import { musicPlayer } from "$lib/shared.svelte";
     import gridFragmentShader from "$shaders/grid.frag.glsl?raw";
     import gridVertexShader from "$shaders/grid.vert.glsl?raw";
     import sunFragmentShader from "$shaders/sun.frag.glsl?raw";
@@ -9,6 +10,8 @@
     import { onMount } from "svelte";
     import * as THREE from "three";
     import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
+
+    const PEAK_DECAY = 8;
 
     const { scene, camera, renderer, renderStage } = useThrelte();
 
@@ -22,6 +25,7 @@
             transparent: true,
             uniforms: {
                 uTime: { value: 0 },
+                uPeak: { value: 0 },
             },
         }),
     );
@@ -37,6 +41,7 @@
                     value: new THREE.Vector2(innerWidth, innerHeight),
                 },
                 uTexture: { value: null },
+                uPeak: { value: 0 },
             },
         }),
     );
@@ -57,10 +62,20 @@
         ); */
     });
 
+    let prevPeak = 0;
     useTask((delta) => {
         time += delta;
         gridMaterial.uniforms.uTime.value = time;
         sunMaterial.uniforms.uTime.value = time;
+
+        if (musicPlayer.peak > prevPeak) {
+            prevPeak = musicPlayer.peak;
+        } else {
+            prevPeak += (musicPlayer.peak - prevPeak) * PEAK_DECAY * delta;
+        }
+
+        gridMaterial.uniforms.uPeak.value = prevPeak;
+        sunMaterial.uniforms.uPeak.value = prevPeak;
     });
 
     useTask(

@@ -1,12 +1,14 @@
 uniform float uTime;
 uniform vec2 uResolution;
 uniform sampler2D uTexture;
+uniform float uPeak;
 varying vec2 vUv;
 
 const float SPEED = 3.0;
 const float CUTOFF = 0.4;
 const float SOLID = 0.6;
 const vec3 SAT_COL = vec3(0.96, 0.19, 0.6);
+const float PEAK_MULT = 1.8;
 
 float easeOut(float t) {
 	return 1.0 - (1.0 - t) * (1.0 - t) * (1.0 - t);
@@ -51,5 +53,5 @@ void main() {
 
     vec3 col = mix(base.rgb, SAT_COL, sat);
 
-    gl_FragColor = vec4(col, base.a * lines * falloff);
+    gl_FragColor = vec4(col * (0.5 + uPeak / 100.0 * PEAK_MULT), base.a * lines * falloff);
 }
