@@ -42,7 +42,9 @@
 {#if showControls}
     <div class="fixed top-4 left-4 z-50">
         <div class={`radial-progress ${colour}`} style="--value:{scorePercent}">
-            {scorePercent}%
+            <span class="font-stereofunk mt-1">
+                {scorePercent}%
+            </span>
         </div>
     </div>
 {/if}

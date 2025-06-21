@@ -2,8 +2,8 @@
     import { Info, Music, Pause, Play, StepForward } from "@lucide/svelte";
     import { CONTROLS_DELAY } from "$lib/config";
     import { getRandomTrack } from "$lib/music";
-    import { mp, score } from "$lib/shared.svelte";
-    import { onMount } from "svelte";
+    import { mp } from "$lib/shared.svelte";
+    import { ON_MOBILE } from "$lib/utils";
 
     const TOAST_TIME = 4000;
 
@@ -13,21 +13,13 @@
     let showControls = $state(false);
     let showToast = $state(false);
 
-    // use onMount to avoid infinite querying
-    onMount(() => {
-        play();
-
-        setTimeout(() => {
-            if (modalEl && audioEl && audioEl.paused) {
-                modalEl.showModal();
-            }
-
-            showControls = true;
-        }, CONTROLS_DELAY);
-    });
-
     $effect(() => {
         mp.audioEl = audioEl;
+
+        setTimeout(() => {
+            modalEl?.showModal();
+            showControls = true;
+        }, CONTROLS_DELAY);
     });
 
     $effect(() => {
@@ -90,11 +82,31 @@
 
 <dialog class="modal" bind:this={modalEl}>
     <div class="modal-box">
-        <h3 class="text-lg font-bold">Aw snap! Audio playback is disabled</h3>
-        <p class="py-4">Click the button below to start jamming!</p>
+        <h3 class="font-rocket-rinder text-secondary text-xl font-bold">
+            Welcome to Neal's website!
+        </h3>
+        <div class="flex items-center gap-2 py-4">
+            {#if ON_MOBILE}
+                Use
+                <div class="flex items-center gap-1">
+                    <kbd class="kbd">◀︎</kbd>
+                    <div class="flex flex-col gap-1">
+                        <kbd class="kbd">▲</kbd>
+                        <kbd class="kbd">▼</kbd>
+                    </div>
+                    <kbd class="kbd">▶︎</kbd>
+                </div>
+                or your mouse
+            {:else}
+                Tap the sides of your screen
+            {/if}
+            to control the car.
+        </div>
+        <p>Hit the notes to score!</p>
         <div class="modal-action">
             <form method="dialog" onsubmit={play}>
-                <button class="btn btn-primary">Play!</button>
+                <button class="btn btn-primary font-rocket-rinder">Play!</button
+                >
             </form>
         </div>
     </div>

@@ -6,6 +6,8 @@
 @theme {
     --font-rocket-rinder: "Rocket Rinder", "sans-serif";
     --font-streamster: "Streamster", "sans-serif";
+    --font-stereofunk: "Stereofunk", "sans-serif";
+    --default-font-family: "Oxanium", "sans-serif";
 }
 
 @source "../node_modules/flowbite-svelte/dist";
@@ -17,4 +19,8 @@
 @font-face {
     font-family: "Streamster";
     src: url("./assets/fonts/Streamster.ttf");
+}
+@font-face {
+    font-family: "Stereofunk";
+    src: url("./assets/fonts/Stereofunk.ttf");
 }

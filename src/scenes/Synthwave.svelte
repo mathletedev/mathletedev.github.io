@@ -36,7 +36,7 @@
     let peak = $state(0);
     let prevNotePeak = $state(0);
     let notes: {
-        pos: THREE.Vector2;
+        pos: THREE.Vector3;
         hit: boolean;
     }[] = $state([]);
     let carX = $state(0);
@@ -45,6 +45,13 @@
     let carTargetZ = $state(0);
     let carRotation = $state(0);
     let ndcMouse = $state(new THREE.Vector2());
+    let keys: Record<string, boolean> = $state({
+        ArrowLeft: false,
+        ArrowRight: false,
+        ArrowUp: false,
+        ArrowDown: false,
+    });
+    let useMouse = $state(true);
 
     let gridMaterial = $state(
         new THREE.ShaderMaterial({
@@ -79,10 +86,22 @@
             (e.clientX / innerWidth) * 2 - 1,
             -(e.clientY / innerHeight) * 2 + 1,
         );
+        useMouse = true;
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+        keys[e.key] = true;
+        useMouse = false;
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+        keys[e.key] = false;
     };
 
     onMount(async () => {
         window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("keyup", onKeyUp);
 
         const sunTexture = await new THREE.TextureLoader().loadAsync(sunURL);
         sunMaterial.uniforms.uTexture.value = sunTexture;
@@ -106,6 +125,12 @@
         mp.waveform;
     });
 
+    onDestroy(() => {
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("keyup", onKeyUp);
+    });
+
     const getWorldPosFromNDC = (ndc: THREE.Vector2) => {
         const vec = new THREE.Vector3(ndc.x, ndc.y, 0.5);
         vec.unproject(camera.current);
@@ -119,16 +144,41 @@
 
     useTask((delta) => {
         time += delta;
+
+        // update material pulses
         gridMaterial.uniforms.uTime.value = time;
         sunMaterial.uniforms.uTime.value = time;
 
-        const worldMouse = getWorldPosFromNDC(ndcMouse);
+        // handle input
+        if (useMouse) {
+            // handle mouse input
+            const worldMouse = getWorldPosFromNDC(ndcMouse);
+            carTargetX = worldMouse.x;
+            carTargetZ = worldMouse.y;
+        } else {
+            // handle keyboard input
+            if (keys.ArrowLeft) {
+                carTargetX -= 0.1;
+            }
+            if (keys.ArrowRight) {
+                carTargetX += 0.1;
+            }
+            if (keys.ArrowUp) {
+                carTargetZ += 0.1;
+            }
+            if (keys.ArrowDown) {
+                carTargetZ -= 0.1;
+            }
+        }
+
         carTargetX = THREE.MathUtils.clamp(
-            worldMouse.x,
+            carTargetX,
             -CAR_MAX_X / 2,
             CAR_MAX_X / 2,
         );
-        carTargetZ = THREE.MathUtils.clamp(worldMouse.y, -0.5, 1.5);
+        carTargetZ = THREE.MathUtils.clamp(carTargetZ, -0.5, 1.5);
+
+        // move car
         carX = THREE.MathUtils.lerp(carX, carTargetX, CAR_SPEED * delta);
         carZ = THREE.MathUtils.lerp(carZ, carTargetZ, CAR_SPEED * delta);
 
@@ -157,18 +207,12 @@
             peak += (nextPeak - peak) * PEAK_DECAY * delta;
         }
 
+        // update material peaks
         gridMaterial.uniforms.uPeak.value = peak;
         sunMaterial.uniforms.uPeak.value = peak;
 
+        // update notes
         for (let i = 0; i < notes.length; i++) {
-            notes[i] = {
-                ...notes[i],
-                pos: new THREE.Vector2(
-                    notes[i].pos.x,
-                    notes[i].pos.y - NOTE_SPEED * delta,
-                ),
-            };
-
             if (
                 !notes[i].hit &&
                 notes[i].pos.y < 0.5 &&
@@ -178,6 +222,21 @@
                 score.hit++;
                 notes[i].hit = true;
             }
+
+            notes[i].pos.y -= NOTE_SPEED * delta;
+            if (notes[i].hit) {
+                notes[i].pos.z += 40 * delta;
+            }
+
+            // force reactivity
+            notes[i] = {
+                ...notes[i],
+                pos: new THREE.Vector3(
+                    notes[i].pos.x,
+                    notes[i].pos.y,
+                    notes[i].pos.z,
+                ),
+            };
         }
         const prevCount = notes.length;
         notes = notes.filter((note) => note.pos.y >= 0);
@@ -194,11 +253,13 @@
             return;
         }
 
+        // spawn new note
         if (nextPeak > prevNotePeak) {
             notes.push({
-                pos: new THREE.Vector2(
+                pos: new THREE.Vector3(
                     Math.random() * NOTE_X_VARIANCE - NOTE_X_VARIANCE / 2,
                     NOTE_SPAWN_DISTANCE,
+                    0,
                 ),
                 hit: false,
             });
@@ -216,10 +277,6 @@
         },
         { stage: renderStage, autoInvalidate: false },
     );
-
-    onDestroy(() => {
-        window.removeEventListener("mousemove", onMouseMove);
-    });
 </script>
 
 <T.AmbientLight intensity={0.05} color="#00bafe" />
@@ -251,11 +308,7 @@
     {/await}
     {#each notes as note}
         <T.Mesh
-            position={[
-                note.pos.x,
-                -3.5 + 2.6 + note.pos.y,
-                note.hit ? 1.0 : 0.1,
-            ]}
+            position={[note.pos.x, -3.5 + 2.6 + note.pos.y, 0.1 + note.pos.z]}
         >
             <T.SphereGeometry
                 args={[
