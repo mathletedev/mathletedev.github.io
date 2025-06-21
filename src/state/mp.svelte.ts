@@ -5,8 +5,3 @@ export const mp = $state({
     audioEl: null as HTMLAudioElement | null,
     paused: false,
 });
-
-export const score = $state({
-    hit: 0,
-    total: 0,
-});

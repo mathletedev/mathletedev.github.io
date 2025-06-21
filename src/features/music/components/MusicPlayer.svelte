@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Info, Music, Pause, Play, StepForward } from "@lucide/svelte";
-    import { CONTROLS_DELAY } from "$lib/config";
+    import { CONTROLS_DELAY } from "$config";
     import { getRandomTrack } from "$lib/music";
-    import { mp } from "$lib/shared.svelte";
-    import { ON_MOBILE } from "$lib/utils";
+    import { mp } from "$state/mp.svelte";
+    import { ON_MOBILE } from "$utils";
 
     const TOAST_TIME = 4000;
 

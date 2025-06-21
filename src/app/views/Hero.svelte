@@ -2,8 +2,8 @@
     import { Canvas } from "@threlte/core";
     import Glitch from "$components/Glitch.svelte";
     import MetallicText from "$components/MetallicText.svelte";
-    import Score from "$components/Score.svelte";
-    import Synthwave from "$scenes/Synthwave.svelte";
+    import Score from "$features/synthwave/components/Score.svelte";
+    import Synthwave from "$features/synthwave/components/Synthwave.svelte";
     import gsap from "gsap";
 
     $effect(() => {

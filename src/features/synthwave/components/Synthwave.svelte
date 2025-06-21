@@ -1,17 +1,18 @@
 <script lang="ts">
     import { T, useTask, useThrelte } from "@threlte/core";
     import { useGltf } from "@threlte/extras";
-    import sunURL from "$assets/sun.png";
-    import { TAU } from "$lib/constants";
+    import { TAU } from "$config";
     import { getPeak } from "$lib/music";
-    import { mp, score } from "$lib/shared.svelte";
-    import gridFragmentShader from "$shaders/grid.frag.glsl?raw";
-    import gridVertexShader from "$shaders/grid.vert.glsl?raw";
-    import sunFragmentShader from "$shaders/sun.frag.glsl?raw";
-    import sunVertexShader from "$shaders/sun.vert.glsl?raw";
+    import { mp } from "$state/mp.svelte";
+    import { score } from "$state/score.svelte";
     import { onDestroy, onMount } from "svelte";
     import * as THREE from "three";
     import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
+    import gridFragmentShader from "../assets/grid.frag.glsl?raw";
+    import gridVertexShader from "../assets/grid.vert.glsl?raw";
+    import sunFragmentShader from "../assets/sun.frag.glsl?raw";
+    import sunURL from "../assets/sun.png";
+    import sunVertexShader from "../assets/sun.vert.glsl?raw";
 
     // in seconds
     const MP_OFFSET = 0.2;

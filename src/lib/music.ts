@@ -1,5 +1,5 @@
-import { JAMENDO_CLIENT_ID } from "./config";
-import { mp } from "./shared.svelte";
+import { JAMENDO_CLIENT_ID } from "$config";
+import { mp } from "$state/mp.svelte";
 
 const JAMENDO_API = "https://api.jamendo.com/v3.0";
 

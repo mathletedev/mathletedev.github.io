@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { CONTROLS_DELAY } from "$lib/config";
-    import { mp, score } from "$lib/shared.svelte";
+    import { CONTROLS_DELAY } from "$config";
+    import { mp } from "$state/mp.svelte";
+    import { score } from "$state/score.svelte";
 
     let showControls = $state(false);
 
