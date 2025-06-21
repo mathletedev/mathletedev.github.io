@@ -8,5 +8,5 @@ export const mp = $state({
 
 export const score = $state({
     hit: 0,
-    missed: 0,
+    total: 0,
 });

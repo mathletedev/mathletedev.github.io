@@ -62,9 +62,6 @@
         await nextTrack();
 
         mp.paused = false;
-        score.hit = 0;
-        score.missed = 0;
-
         modalEl?.close();
 
         toast();

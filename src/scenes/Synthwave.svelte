@@ -35,7 +35,10 @@
     let composer: EffectComposer | null = $state(null);
     let peak = $state(0);
     let prevNotePeak = $state(0);
-    let notes: THREE.Vector2[] = $state([]);
+    let notes: {
+        pos: THREE.Vector2;
+        hit: boolean;
+    }[] = $state([]);
     let carX = $state(0);
     let carZ = $state(0);
     let carTargetX = $state(0);
@@ -97,6 +100,12 @@
         ); */
     });
 
+    $effect(() => {
+        notes = [];
+
+        mp.waveform;
+    });
+
     const getWorldPosFromNDC = (ndc: THREE.Vector2) => {
         const vec = new THREE.Vector3(ndc.x, ndc.y, 0.5);
         vec.unproject(camera.current);
@@ -151,27 +160,28 @@
         gridMaterial.uniforms.uPeak.value = peak;
         sunMaterial.uniforms.uPeak.value = peak;
 
-        let hit = 0;
         for (let i = 0; i < notes.length; i++) {
-            notes[i] = new THREE.Vector2(
-                notes[i].x,
-                notes[i].y - NOTE_SPEED * delta,
-            );
+            notes[i] = {
+                ...notes[i],
+                pos: new THREE.Vector2(
+                    notes[i].pos.x,
+                    notes[i].pos.y - NOTE_SPEED * delta,
+                ),
+            };
 
             if (
-                notes[i].y < carZ + 2.5 &&
-                notes[i].y > carZ + 1.0 &&
-                notes[i].x > carX - 0.8 &&
-                notes[i].x < carX + 0.8
+                !notes[i].hit &&
+                notes[i].pos.y < 0.5 &&
+                notes[i].pos.x > carX - 0.8 &&
+                notes[i].pos.x < carX + 0.8
             ) {
                 score.hit++;
-                hit++;
-                notes[i].y = -1;
+                notes[i].hit = true;
             }
         }
         const prevCount = notes.length;
-        notes = notes.filter((note) => note.y > 0);
-        score.missed += Math.max(prevCount - notes.length - hit, 0);
+        notes = notes.filter((note) => note.pos.y >= 0);
+        score.total += prevCount - notes.length;
 
         if (mp.paused) {
             return;
@@ -185,12 +195,13 @@
         }
 
         if (nextPeak > prevNotePeak) {
-            notes.push(
-                new THREE.Vector2(
+            notes.push({
+                pos: new THREE.Vector2(
                     Math.random() * NOTE_X_VARIANCE - NOTE_X_VARIANCE / 2,
                     NOTE_SPAWN_DISTANCE,
                 ),
-            );
+                hit: false,
+            });
             prevNotePeak = nextPeak;
         } else {
             prevNotePeak += (nextPeak - prevNotePeak) * NOTE_PEAK_DECAY * delta;
@@ -222,13 +233,13 @@
     <T.PlaneGeometry args={[20 + peak / 100, 20 + peak / 100]} />
 </T.Mesh>
 
-<T.Group position.y={-1.1} rotation.x={TAU * -0.25}>
+<T.Group position={[0, -1.1, -carZ]} rotation.x={TAU * -0.25}>
     <T.Mesh material={gridMaterial}>
         <T.PlaneGeometry args={[30, 10]} />
     </T.Mesh>
     {#await gltf then { scene }}
         <T
-            position={[carX, -1.8 + carZ, 0.3]}
+            position={[carX, -1.8, 0.3]}
             rotation={[
                 TAU * 0.25,
                 TAU * 0.5 - carRotation * 0.5,
@@ -239,16 +250,25 @@
         />
     {/await}
     {#each notes as note}
-        <T.Mesh position={[note.x, -3.5 + 0.3 + note.y, 0.1]}>
+        <T.Mesh
+            position={[
+                note.pos.x,
+                -3.5 + 2.6 + note.pos.y,
+                note.hit ? 1.0 : 0.1,
+            ]}
+        >
             <T.SphereGeometry
                 args={[
-                    (0.1 * (NOTE_SPAWN_DISTANCE - note.y)) /
+                    (0.1 * (NOTE_SPAWN_DISTANCE - note.pos.y)) /
                         NOTE_SPAWN_DISTANCE,
                     16,
                     16,
                 ]}
             />
-            <T.MeshPhongMaterial emissive="yellow" emissiveIntensity={4} />
+            <T.MeshToonMaterial
+                emissive={note.hit ? "yellow" : "red"}
+                emissiveIntensity={note.pos.y < 0.25 ? 4 : 0}
+            />
         </T.Mesh>
     {/each}
 </T.Group>

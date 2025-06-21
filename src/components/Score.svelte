@@ -1,6 +1,6 @@
 <script lang="ts">
     import { CONTROLS_DELAY } from "$lib/config";
-    import { score } from "$lib/shared.svelte";
+    import { mp, score } from "$lib/shared.svelte";
 
     let showControls = $state(false);
 
@@ -10,12 +10,19 @@
         }, CONTROLS_DELAY);
     });
 
+    $effect(() => {
+        score.hit = 0;
+        score.total = 0;
+
+        mp.waveform;
+    });
+
     const scorePercent = $derived.by(() => {
-        if (score.hit + score.missed === 0) {
+        if (score.total === 0) {
             return 100;
         }
 
-        return Math.round((score.hit / (score.hit + score.missed)) * 100);
+        return Math.round((score.hit / score.total) * 100);
     });
 
     const colour = $derived.by(() => {
