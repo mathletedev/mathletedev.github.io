@@ -1,10 +1,10 @@
 <script lang="ts">
     import { Info, Music, Pause, Play, StepForward } from "@lucide/svelte";
+    import { CONTROLS_DELAY } from "$lib/config";
     import { getRandomTrack } from "$lib/music";
-    import { mp } from "$lib/shared.svelte";
+    import { mp, score } from "$lib/shared.svelte";
     import { onMount } from "svelte";
 
-    const START_DELAY = 6000;
     const TOAST_TIME = 4000;
 
     let modalEl: HTMLDialogElement | null = $state(null);
@@ -23,7 +23,7 @@
             }
 
             showControls = true;
-        }, START_DELAY);
+        }, CONTROLS_DELAY);
     });
 
     $effect(() => {
@@ -62,6 +62,9 @@
         await nextTrack();
 
         mp.paused = false;
+        score.hit = 0;
+        score.missed = 0;
+
         modalEl?.close();
 
         toast();
@@ -138,5 +141,11 @@
     {/if}
 {/if}
 
-<audio autoplay bind:this={audioEl} onloadedmetadata={start} onended={play}
+<audio
+    autoplay
+    bind:this={audioEl}
+    onloadedmetadata={start}
+    onplay={() => (mp.paused = false)}
+    onpause={() => (mp.paused = true)}
+    onended={play}
 ></audio>

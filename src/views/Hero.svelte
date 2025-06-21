@@ -2,6 +2,7 @@
     import { Canvas } from "@threlte/core";
     import Glitch from "$components/Glitch.svelte";
     import MetallicText from "$components/MetallicText.svelte";
+    import Score from "$components/Score.svelte";
     import Synthwave from "$scenes/Synthwave.svelte";
     import gsap from "gsap";
 
@@ -18,6 +19,8 @@
         });
     });
 </script>
+
+<Score />
 
 <div id="synthwave" class="fixed top-0 z-[-10] h-screen w-screen">
     <Canvas>

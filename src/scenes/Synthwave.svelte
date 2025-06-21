@@ -4,7 +4,7 @@
     import sunURL from "$assets/sun.png";
     import { TAU } from "$lib/constants";
     import { getPeak } from "$lib/music";
-    import { mp } from "$lib/shared.svelte";
+    import { mp, score } from "$lib/shared.svelte";
     import gridFragmentShader from "$shaders/grid.frag.glsl?raw";
     import gridVertexShader from "$shaders/grid.vert.glsl?raw";
     import sunFragmentShader from "$shaders/sun.frag.glsl?raw";
@@ -17,14 +17,15 @@
     const MP_OFFSET = 0.2;
     const PEAK_DECAY = 8;
     // in units per second
-    const NOTE_SPEED = 10;
+    const NOTE_SPEED = 8;
     // in units
     const NOTE_SPAWN_DISTANCE = 10;
     // in seconds
     const NOTE_SPAWN_OFFSET = NOTE_SPAWN_DISTANCE / NOTE_SPEED;
-    const NOTE_X_VARIANCE = 5;
+    const NOTE_X_VARIANCE = 4;
     const NOTE_PEAK_DECAY = 4;
-    const CAR_SPEED = 1.5;
+    const CAR_SPEED = 1.8;
+    const CAR_MAX_X = 5;
     const CAR_TURN_SPEED = 10;
 
     const { scene, camera, renderer, renderStage } = useThrelte();
@@ -115,8 +116,8 @@
         const worldMouse = getWorldPosFromNDC(ndcMouse);
         carTargetX = THREE.MathUtils.clamp(
             worldMouse.x,
-            -NOTE_X_VARIANCE / 2,
-            NOTE_X_VARIANCE / 2,
+            -CAR_MAX_X / 2,
+            CAR_MAX_X / 2,
         );
         carTargetZ = THREE.MathUtils.clamp(worldMouse.y, -0.5, 1.5);
         carX = THREE.MathUtils.lerp(carX, carTargetX, CAR_SPEED * delta);
@@ -150,13 +151,27 @@
         gridMaterial.uniforms.uPeak.value = peak;
         sunMaterial.uniforms.uPeak.value = peak;
 
+        let hit = 0;
         for (let i = 0; i < notes.length; i++) {
             notes[i] = new THREE.Vector2(
                 notes[i].x,
                 notes[i].y - NOTE_SPEED * delta,
             );
+
+            if (
+                notes[i].y < carZ + 2.5 &&
+                notes[i].y > carZ + 1.0 &&
+                notes[i].x > carX - 0.8 &&
+                notes[i].x < carX + 0.8
+            ) {
+                score.hit++;
+                hit++;
+                notes[i].y = -1;
+            }
         }
+        const prevCount = notes.length;
         notes = notes.filter((note) => note.y > 0);
+        score.missed += Math.max(prevCount - notes.length - hit, 0);
 
         if (mp.paused) {
             return;
@@ -224,7 +239,7 @@
         />
     {/await}
     {#each notes as note}
-        <T.Mesh position={[note.x, -3.5 + note.y, 0.1]}>
+        <T.Mesh position={[note.x, -3.5 + 0.3 + note.y, 0.1]}>
             <T.SphereGeometry
                 args={[
                     (0.1 * (NOTE_SPAWN_DISTANCE - note.y)) /
@@ -233,7 +248,7 @@
                     16,
                 ]}
             />
-            <T.MeshPhongMaterial emissive="indigo" emissiveIntensity={10} />
+            <T.MeshPhongMaterial emissive="yellow" emissiveIntensity={4} />
         </T.Mesh>
     {/each}
 </T.Group>
