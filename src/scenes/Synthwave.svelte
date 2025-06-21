@@ -1,5 +1,6 @@
 <script lang="ts">
     import { T, useTask, useThrelte } from "@threlte/core";
+    import { useGltf } from "@threlte/extras";
     import sunURL from "$assets/sun.png";
     import { TAU } from "$lib/constants";
     import { getPeak } from "$lib/music";
@@ -8,7 +9,7 @@
     import gridVertexShader from "$shaders/grid.vert.glsl?raw";
     import sunFragmentShader from "$shaders/sun.frag.glsl?raw";
     import sunVertexShader from "$shaders/sun.vert.glsl?raw";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import * as THREE from "three";
     import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
 
@@ -21,15 +22,25 @@
     const NOTE_SPAWN_DISTANCE = 10;
     // in seconds
     const NOTE_SPAWN_OFFSET = NOTE_SPAWN_DISTANCE / NOTE_SPEED;
+    const NOTE_X_VARIANCE = 5;
     const NOTE_PEAK_DECAY = 4;
+    const CAR_SPEED = 1.5;
+    const CAR_TURN_SPEED = 10;
 
     const { scene, camera, renderer, renderStage } = useThrelte();
+    const gltf = useGltf("/models/toyota_corolla_ae86_trueno.glb");
 
     let time = $state(0);
     let composer: EffectComposer | null = $state(null);
     let peak = $state(0);
     let prevNotePeak = $state(0);
     let notes: THREE.Vector2[] = $state([]);
+    let carX = $state(0);
+    let carZ = $state(0);
+    let carTargetX = $state(0);
+    let carTargetZ = $state(0);
+    let carRotation = $state(0);
+    let ndcMouse = $state(new THREE.Vector2());
 
     let gridMaterial = $state(
         new THREE.ShaderMaterial({
@@ -59,7 +70,16 @@
         }),
     );
 
+    const onMouseMove = (e: MouseEvent) => {
+        ndcMouse = new THREE.Vector2(
+            (e.clientX / innerWidth) * 2 - 1,
+            -(e.clientY / innerHeight) * 2 + 1,
+        );
+    };
+
     onMount(async () => {
+        window.addEventListener("mousemove", onMouseMove);
+
         const sunTexture = await new THREE.TextureLoader().loadAsync(sunURL);
         sunMaterial.uniforms.uTexture.value = sunTexture;
 
@@ -76,10 +96,38 @@
         ); */
     });
 
+    const getWorldPosFromNDC = (ndc: THREE.Vector2) => {
+        const vec = new THREE.Vector3(ndc.x, ndc.y, 0.5);
+        vec.unproject(camera.current);
+        const dir = vec.sub(camera.current.position).normalize();
+        const dist = -camera.current.position.z / dir.z;
+        const pos = camera.current.position
+            .clone()
+            .add(dir.multiplyScalar(dist));
+        return new THREE.Vector2(pos.x, pos.y);
+    };
+
     useTask((delta) => {
         time += delta;
         gridMaterial.uniforms.uTime.value = time;
         sunMaterial.uniforms.uTime.value = time;
+
+        const worldMouse = getWorldPosFromNDC(ndcMouse);
+        carTargetX = THREE.MathUtils.clamp(
+            worldMouse.x,
+            -NOTE_X_VARIANCE / 2,
+            NOTE_X_VARIANCE / 2,
+        );
+        carTargetZ = THREE.MathUtils.clamp(worldMouse.y, -0.5, 1.5);
+        carX = THREE.MathUtils.lerp(carX, carTargetX, CAR_SPEED * delta);
+        carZ = THREE.MathUtils.lerp(carZ, carTargetZ, CAR_SPEED * delta);
+
+        const dx = carTargetX - carX;
+        carRotation = THREE.MathUtils.lerp(
+            carRotation,
+            -dx * 0.2,
+            CAR_TURN_SPEED * delta,
+        );
 
         if (!mp.audioEl) {
             return;
@@ -123,7 +171,10 @@
 
         if (nextPeak > prevNotePeak) {
             notes.push(
-                new THREE.Vector2(Math.random() * 2 - 1, NOTE_SPAWN_DISTANCE),
+                new THREE.Vector2(
+                    Math.random() * NOTE_X_VARIANCE - NOTE_X_VARIANCE / 2,
+                    NOTE_SPAWN_DISTANCE,
+                ),
             );
             prevNotePeak = nextPeak;
         } else {
@@ -139,21 +190,44 @@
         },
         { stage: renderStage, autoInvalidate: false },
     );
+
+    onDestroy(() => {
+        window.removeEventListener("mousemove", onMouseMove);
+    });
 </script>
 
-<T.AmbientLight intensity={0.5} />
-<T.DirectionalLight position={[0, 1, 0]} intensity={1} />
+<T.AmbientLight intensity={0.05} color="#00bafe" />
+<T.DirectionalLight
+    position={[0, 1, 30]}
+    intensity={(10 * peak) / 100}
+    color="#6c3baa"
+/>
 
 <T.Mesh position.y={0} position.z={-10} material={sunMaterial}>
     <T.PlaneGeometry args={[20 + peak / 100, 20 + peak / 100]} />
 </T.Mesh>
 
 <T.Group position.y={-1.1} rotation.x={TAU * -0.25}>
+    <T.Mesh material={gridMaterial}>
+        <T.PlaneGeometry args={[30, 10]} />
+    </T.Mesh>
+    {#await gltf then { scene }}
+        <T
+            position={[carX, -1.8 + carZ, 0.3]}
+            rotation={[
+                TAU * 0.25,
+                TAU * 0.5 - carRotation * 0.5,
+                carRotation * 0.5,
+            ]}
+            scale={0.25}
+            is={scene}
+        />
+    {/await}
     {#each notes as note}
         <T.Mesh position={[note.x, -3.5 + note.y, 0.1]}>
             <T.SphereGeometry
                 args={[
-                    (0.05 * (NOTE_SPAWN_DISTANCE - note.y)) /
+                    (0.1 * (NOTE_SPAWN_DISTANCE - note.y)) /
                         NOTE_SPAWN_DISTANCE,
                     16,
                     16,
@@ -162,7 +236,4 @@
             <T.MeshPhongMaterial emissive="indigo" emissiveIntensity={10} />
         </T.Mesh>
     {/each}
-    <T.Mesh material={gridMaterial}>
-        <T.PlaneGeometry args={[30, 10]} />
-    </T.Mesh>
 </T.Group>

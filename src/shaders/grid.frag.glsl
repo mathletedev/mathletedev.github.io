@@ -4,7 +4,7 @@ varying vec2 vUv;
 
 const float SPEED = 3.0;
 const float ROW_DENSITY = 10.0;
-const float COL_DENSITY = 20.0;
+const float COL_DENSITY = 24.0;
 const float LINE_THICKNESS = 0.03;
 const vec3 BASE_COL = vec3(0.02, 0, 0.05);
 const vec3 GRID_COL = vec3(0.44, 0.82, 1);
