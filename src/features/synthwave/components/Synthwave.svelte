@@ -5,7 +5,6 @@
     import { mp } from "$state/mp.svelte";
     import { onDestroy, onMount } from "svelte";
     import * as THREE from "three";
-    import { EffectComposer, RenderPass } from "three/examples/jsm/Addons.js";
     import gridFragmentShader from "../assets/grid.frag.glsl?raw";
     import gridVertexShader from "../assets/grid.vert.glsl?raw";
     import sunFragmentShader from "../assets/sun.frag.glsl?raw";
@@ -15,10 +14,8 @@
     import { Game } from "../game/game";
     import type { Note } from "../game/types";
 
-    const { scene, camera, renderer, renderStage } = useThrelte();
+    const { camera } = useThrelte();
     const gltf = useGltf("/models/toyota_corolla_ae86_trueno.glb");
-
-    let composer: EffectComposer | null = $state(null);
 
     const game = new Game();
 
@@ -57,23 +54,14 @@
         }),
     );
 
+    let carScene: THREE.Group | undefined = $state();
+    let carCollider = new THREE.Box3();
+
     onMount(async () => {
         game.init();
 
         const sunTexture = await new THREE.TextureLoader().loadAsync(sunURL);
         sunMaterial.uniforms.uTexture.value = sunTexture;
-
-        composer = new EffectComposer(renderer);
-        composer.addPass(new RenderPass(scene, camera.current));
-        // BUG: bloom makes everything look dull
-        /* composer.addPass(
-            new UnrealBloomPass(
-                new THREE.Vector2(innerWidth, innerHeight),
-                1,
-                0.2,
-                1,
-            ),
-        ); */
     });
 
     $effect(() => {
@@ -87,7 +75,7 @@
     });
 
     useTask((delta) => {
-        game.update(delta, camera.current);
+        game.update(delta, camera.current, carCollider);
 
         time = game.time;
         peak = game.peak;
@@ -101,16 +89,11 @@
 
         gridMaterial.uniforms.uPeak.value = peak;
         sunMaterial.uniforms.uPeak.value = peak;
-    });
 
-    useTask(
-        () => {
-            if (composer) {
-                composer.render();
-            }
-        },
-        { stage: renderStage, autoInvalidate: false },
-    );
+        if (carScene) {
+            carCollider.setFromObject(carScene);
+        }
+    });
 </script>
 
 <T.AmbientLight intensity={0.05} color="#00bafe" />
@@ -138,6 +121,7 @@
             ]}
             scale={0.25}
             is={scene}
+            bind:ref={carScene}
         />
     {/await}
     <T.Group position={[0, -3.5 + 2.6, 0.1]}>

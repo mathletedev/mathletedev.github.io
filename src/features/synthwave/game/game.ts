@@ -35,7 +35,7 @@ export class Game {
     };
     useMouse = true;
 
-    update = (delta: number, camera: THREE.Camera) => {
+    update = (delta: number, camera: THREE.Camera, carCollider: THREE.Box3) => {
         this.time += delta;
 
         if (this.useMouse) {
@@ -48,7 +48,7 @@ export class Game {
 
         this.updatePeak(delta);
 
-        this.updateNotes(delta);
+        this.updateNotes(delta, carCollider);
     };
 
     updateCar = (delta: number) => {
@@ -98,19 +98,19 @@ export class Game {
         }
     };
 
-    updateNotes = (delta: number) => {
+    updateNotes = (delta: number, carCollider: THREE.Box3) => {
         if (!mp.audioEl) {
             return;
         }
 
         for (let i = 0; i < this.notes.length; i++) {
             const note = this.notes[i];
-
+            const carSize = new THREE.Vector3();
+            carCollider.getSize(carSize);
             if (
                 !note.hit &&
                 note.position.y < 0.5 &&
-                note.position.x > this.car.position.x - 0.8 &&
-                note.position.x < this.car.position.x + 0.8
+                Math.abs(note.position.x - this.car.position.x) < carSize.x / 2
             ) {
                 score.hit++;
                 note.hit = true;
