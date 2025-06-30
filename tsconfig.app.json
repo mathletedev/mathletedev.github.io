@@ -18,12 +18,14 @@
 
         "baseUrl": "src",
         "paths": {
+            "$app/*": ["app/*"],
             "$assets/*": ["assets/*"],
             "$components/*": ["components/*"],
+            "$config": ["config.ts"],
+            "$features/*": ["features/*"],
             "$lib/*": ["lib/*"],
-            "$scenes/*": ["scenes/*"],
-            "$shaders/*": ["shaders/*"],
-            "$views/*": ["views/*"]
+            "$state/*": ["state/*"],
+            "$utils": ["utils.ts"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
