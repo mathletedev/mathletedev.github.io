@@ -15,3 +15,5 @@ export const CAR_SPEED = 1.8;
 export const CAR_KEYBOARD_SPEED = 0.2;
 export const CAR_TURN_SPEED = 10;
 export const CAR_MAX_X = 5;
+export const CAR_JUMP = 0.05;
+export const CAR_JUMP_DECAY = 7;

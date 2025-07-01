@@ -23,6 +23,7 @@
     let peak = $state(0);
     let notes = $state<Note[]>([]);
     let carX = $state(0);
+    let carY = $state(0);
     let carZ = $state(0);
     let carRotation = $state(0);
 
@@ -81,7 +82,8 @@
         peak = game.peak;
         notes = game.notes;
         carX = game.car.position.x;
-        carZ = game.car.position.y;
+        carY = game.car.position.y;
+        carZ = game.car.position.z;
         carRotation = game.car.rotation;
 
         gridMaterial.uniforms.uTime.value = time;
@@ -113,7 +115,7 @@
     </T.Mesh>
     {#await gltf then { scene }}
         <T
-            position={[carX, -1.8, 0.3]}
+            position={[carX, -1.8, carY + 0.3]}
             rotation={[
                 TAU * 0.25,
                 TAU * 0.5 - carRotation * 0.5,

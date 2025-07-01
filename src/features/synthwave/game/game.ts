@@ -3,6 +3,8 @@ import { mp } from "$state/mp.svelte";
 import { score } from "$state/score.svelte";
 import * as THREE from "three";
 import {
+    CAR_JUMP,
+    CAR_JUMP_DECAY,
     CAR_KEYBOARD_SPEED,
     CAR_MAX_X,
     CAR_SPEED,
@@ -23,7 +25,7 @@ export class Game {
     prevNotePeak = 0;
     car = {
         target: new THREE.Vector2(),
-        position: new THREE.Vector2(),
+        position: new THREE.Vector3(),
         rotation: 0,
     };
     mouse = new THREE.Vector2();
@@ -64,8 +66,8 @@ export class Game {
             this.car.target.x,
             CAR_SPEED * delta,
         );
-        this.car.position.y = THREE.MathUtils.lerp(
-            this.car.position.y,
+        this.car.position.z = THREE.MathUtils.lerp(
+            this.car.position.z,
             this.car.target.y,
             CAR_SPEED * delta,
         );
@@ -75,6 +77,12 @@ export class Game {
             this.car.rotation,
             -dx * 0.2,
             CAR_TURN_SPEED * delta,
+        );
+
+        this.car.position.y = THREE.MathUtils.lerp(
+            this.car.position.y,
+            0,
+            CAR_JUMP_DECAY * delta,
         );
     };
 
@@ -114,12 +122,13 @@ export class Game {
             ) {
                 score.hit++;
                 note.hit = true;
+                this.car.position.y = CAR_JUMP;
             }
 
             note.position.y -= NOTE_SPEED * delta;
-            if (note.hit) {
-                note.position.z += 40 * delta;
-            }
+            // if (note.hit) {
+            //     note.position.z += 40 * delta;
+            // }
 
             // force reactivity
             this.notes[i] = {
