@@ -14,6 +14,12 @@
     import { Game } from "../game/game";
     import type { Note } from "../game/types";
 
+    interface Props {
+        visible: boolean;
+    }
+
+    let { visible }: Props = $props();
+
     const { camera } = useThrelte();
     const gltf = useGltf("/models/toyota_corolla_ae86_trueno.glb");
 
@@ -76,6 +82,10 @@
     });
 
     useTask((delta) => {
+        if (!visible) {
+            return;
+        }
+
         game.update(delta, camera.current, carCollider);
 
         time = game.time;

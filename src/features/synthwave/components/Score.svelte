@@ -41,7 +41,7 @@
 </script>
 
 {#if showControls}
-    <div class="fixed top-4 left-4 z-50">
+    <div class="fixed top-4 left-4 z-[-5]">
         <div class={`radial-progress ${colour}`} style="--value:{scorePercent}">
             <span class="font-stereofunk mt-1">
                 {scorePercent}%
