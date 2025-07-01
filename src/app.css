@@ -24,3 +24,7 @@
     font-family: "Stereofunk";
     src: url("./assets/fonts/Stereofunk.ttf");
 }
+
+code {
+    font-family: "Cascadia Code", monospace;
+}

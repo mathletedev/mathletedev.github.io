@@ -138,7 +138,7 @@
     </div>
 
     {#if showToast}
-        <div class="toast">
+        <div class="toast z-50">
             <div class="alert alert-info">
                 <Music />
                 <div>
