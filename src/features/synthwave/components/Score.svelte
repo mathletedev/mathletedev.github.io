@@ -1,15 +1,6 @@
 <script lang="ts">
-    import { CONTROLS_DELAY } from "$config";
     import { mp } from "$state/mp.svelte";
     import { score } from "$state/score.svelte";
-
-    let showControls = $state(false);
-
-    $effect(() => {
-        setTimeout(() => {
-            showControls = true;
-        }, CONTROLS_DELAY);
-    });
 
     $effect(() => {
         score.hit = 0;
@@ -40,12 +31,10 @@
     });
 </script>
 
-{#if showControls}
-    <div class="fixed top-4 left-4 z-[-5]">
-        <div class={`radial-progress ${colour}`} style="--value:{scorePercent}">
-            <span class="font-stereofunk mt-1">
-                {scorePercent}%
-            </span>
-        </div>
+<div class="fixed top-4 left-4 z-[-5]">
+    <div class={`radial-progress ${colour}`} style="--value:{scorePercent}">
+        <span class="font-stereofunk mt-1">
+            {scorePercent}%
+        </span>
     </div>
-{/if}
+</div>

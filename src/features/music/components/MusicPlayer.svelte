@@ -85,7 +85,9 @@
         <h3 class="font-rocket-rinder text-secondary text-xl font-bold">
             Welcome to Neal's website!
         </h3>
-        <div class="flex items-center gap-2 py-4">
+        <p class="pt-2">Turn up the volume;</p>
+        <p>Hit notes to score!</p>
+        <div class="flex items-center gap-2 py-2">
             {#if ON_MOBILE}
                 Use
                 <div class="flex items-center gap-1">
@@ -96,13 +98,12 @@
                     </div>
                     <kbd class="kbd">▶︎</kbd>
                 </div>
-                or your mouse
+                or your mouse;
             {:else}
-                Tap the sides of your screen
+                Tap the sides of your screen;
             {/if}
-            to control the car.
         </div>
-        <p>Hit the notes to score!</p>
+        <p>Scroll down to learn more!</p>
         <div class="modal-action">
             <form method="dialog" onsubmit={play}>
                 <button class="btn btn-primary font-rocket-rinder">Play!</button
