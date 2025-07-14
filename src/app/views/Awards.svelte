@@ -1,19 +1,56 @@
 <script lang="ts">
+    import MatrixRain from "$features/matrix-rain/components/MatrixRain.svelte";
     import { AWARDS, type Award } from "$lib/awards";
     import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { onMount } from "svelte";
+
+    gsap.registerPlugin(ScrollTrigger);
 
     let awards: Award[] = $state([]);
 
-    $effect(() => {
-        const tl = gsap.timeline();
-        for (const [i, award] of AWARDS.entries()) {
-            tl.add(
-                () => {
-                    awards = [...awards, award];
-                },
-                1 + i * 0.1,
-            );
-        }
+    onMount(() => {
+        ScrollTrigger.create({
+            trigger: "#awards",
+            start: "top center",
+            end: "bottom top",
+            once: true,
+            onEnter: () => {
+                setTimeout(() => {
+                    const tl = gsap.timeline();
+                    for (const [i, award] of AWARDS.entries()) {
+                        tl.add(
+                            () => {
+                                awards = [...awards, award];
+                            },
+                            1 + i * 0.1,
+                        );
+                    }
+                }, 500);
+            },
+        });
+
+        gsap.to("#matrix-rain-mask", {
+            height: "100vh",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#awards",
+                start: "top bottom",
+                end: "top top",
+                scrub: true,
+            },
+        });
+
+        gsap.to("#matrix-rain-bg-mask", {
+            height: "100vh",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#awards",
+                start: "top bottom",
+                end: "top top",
+                scrub: true,
+            },
+        });
     });
 
     let titleLength = $derived(
@@ -40,7 +77,19 @@
     };
 </script>
 
-<div class="bg-base-100 flex h-screen flex-col items-center justify-center">
+<div
+    id="matrix-rain-mask"
+    class="fixed top-0 z-[-10] h-0 w-screen overflow-hidden"
+>
+    <MatrixRain />
+</div>
+
+<div
+    id="matrix-rain-bg-mask"
+    class="bg-base-100 fixed bottom-0 z-[-15] h-0 w-screen overflow-hidden"
+></div>
+
+<div id="awards" class="flex h-screen flex-col items-center justify-center">
     <div class="w-3xl">
         <div class="mockup-code bg-base-300 w-full">
             <pre data-prefix="λ"><code class="text-primary"

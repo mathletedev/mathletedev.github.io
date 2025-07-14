@@ -17,16 +17,4 @@
     });
 </script>
 
-<canvas
-    bind:this={canvas}
-    class="pointer-events-none fixed top-0 left-0 z-[-10] h-screen w-full"
-></canvas>
-
-<style>
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-    }
-</style>
+<canvas bind:this={canvas}></canvas>
