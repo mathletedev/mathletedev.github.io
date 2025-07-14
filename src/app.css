@@ -10,8 +10,6 @@
     --default-font-family: "Oxanium", "sans-serif";
 }
 
-@source "../node_modules/flowbite-svelte/dist";
-
 @font-face {
     font-family: "Rocket Rinder";
     src: url("./assets/fonts/Rocket Rinder.otf");
@@ -23,6 +21,10 @@
 @font-face {
     font-family: "Stereofunk";
     src: url("./assets/fonts/Stereofunk.ttf");
+}
+@font-face {
+    font-family: "Matrix Code NFI";
+    src: url("./assets/fonts/Matrix Code NFI.ttf");
 }
 
 code {
