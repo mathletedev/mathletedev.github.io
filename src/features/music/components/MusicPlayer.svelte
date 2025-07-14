@@ -80,9 +80,11 @@
     };
 </script>
 
-<dialog class="modal" bind:this={modalEl}>
-    <div class="modal-box">
-        <h3 class="font-rocket-rinder text-secondary text-xl font-bold">
+<dialog class="modal h-screen w-screen" bind:this={modalEl}>
+    <div class="modal-box text-sm md:text-base">
+        <h3
+            class="font-rocket-rinder text-secondary text-base font-bold md:text-xl"
+        >
             Welcome to Neal's website!
         </h3>
         <p class="pt-2">Turn up the volume;</p>
@@ -142,7 +144,7 @@
         <div class="toast z-50">
             <div class="alert alert-info">
                 <Music />
-                <div>
+                <div class="text-xs md:text-base">
                     <span class="font-bold">[{track.artist_name}]</span>
                     {track.name}
                 </div>
