@@ -65,6 +65,8 @@
     <Score />
 {/if}
 
+<div id="synthwave-background" class="fixed z-[-20] h-screen w-screen"></div>
+
 {#if synthwaveVisible}
     <div id="synthwave" class="fixed top-0 z-[-20] h-screen w-screen">
         <Canvas>
@@ -83,3 +85,14 @@
         </div>
     </div>
 </div>
+
+<style>
+    #synthwave-background {
+        background: linear-gradient(
+            to bottom,
+            oklch(15% 0.09 281.288) 25%,
+            oklch(29% 0.136 325.661) 45%,
+            oklch(15% 0.09 281.288)
+        );
+    }
+</style>
