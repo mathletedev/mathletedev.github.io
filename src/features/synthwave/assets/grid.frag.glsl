@@ -3,14 +3,14 @@ uniform float uPeak;
 varying vec2 vUv;
 
 const float SPEED = 3.0;
-const float ROW_DENSITY = 10.0;
+const float ROW_DENSITY = 18.0;
 const float COL_DENSITY = 24.0;
 const float LINE_THICKNESS = 0.03;
 const vec3 BASE_COL = vec3(0.02, 0, 0.05);
 const vec3 GRID_COL = vec3(0.44, 0.82, 1);
 const vec3 FINISH_LINE_COL = vec3(0.96, 0.19, 0.60);
 const float PEAK_MULT = 1.2;
-const float FINISH_LINE = -0.1;
+const float FINISH_LINE = 0.0;
 
 float rampUp(float t) {
 	return pow(t, 1.5);

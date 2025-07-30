@@ -19,6 +19,7 @@ import { Note } from "./types";
 import { getWorldPosFromNDC } from "./utils";
 
 export class Game {
+    scale = 1;
     time = 0;
     peak = 0;
     notes: Note[] = [];
@@ -64,12 +65,12 @@ export class Game {
         this.car.position.x = THREE.MathUtils.lerp(
             this.car.position.x,
             this.car.target.x,
-            CAR_SPEED * delta,
+            (CAR_SPEED * delta) / this.scale,
         );
         this.car.position.z = THREE.MathUtils.lerp(
             this.car.position.z,
             this.car.target.y,
-            CAR_SPEED * delta,
+            (CAR_SPEED * delta) / this.scale,
         );
 
         const dx = this.car.target.x - this.car.position.x;
@@ -186,6 +187,9 @@ export class Game {
         window.addEventListener("mousemove", this.onMouseMove);
         window.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("keyup", this.onKeyUp);
+        window.addEventListener("resize", this.onResize);
+
+        this.onResize();
     };
 
     restart = () => {
@@ -197,6 +201,7 @@ export class Game {
         window.removeEventListener("mousemove", this.onMouseMove);
         window.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("keyup", this.onKeyUp);
+        window.removeEventListener("resize", this.onResize);
     };
 
     onMouseMove = (e: MouseEvent) => {
@@ -214,5 +219,13 @@ export class Game {
 
     onKeyUp = (e: KeyboardEvent) => {
         this.keys[e.key] = false;
+    };
+
+    onResize = () => {
+        if (window.innerWidth < 800) {
+            this.scale = Math.sqrt(window.innerWidth / 800);
+        } else {
+            this.scale = 1;
+        }
     };
 }

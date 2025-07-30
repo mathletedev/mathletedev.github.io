@@ -90,7 +90,7 @@
 ></div>
 
 <div id="awards" class="flex h-screen flex-col items-center justify-center">
-    <div class="max-w-full px-4">
+    <div class="max-w-full">
         <div class="mockup-code bg-base-300 pr-2 text-xs md:text-base">
             <pre data-prefix="λ"><code class="text-primary"
                     >SELECT * FROM awards;</code

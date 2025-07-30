@@ -1,5 +1,5 @@
 <script lang="ts">
-    const TEXT = "『王诗朗』";
+    const TEXT = "『软件工程师』";
 
     let glitched = $state(false);
 

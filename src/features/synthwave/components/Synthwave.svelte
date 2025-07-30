@@ -19,6 +19,7 @@
 
     const game = new Game();
 
+    let scale = $state(1);
     let time = $state(0);
     let peak = $state(0);
     let notes = $state<Note[]>([]);
@@ -78,6 +79,7 @@
     useTask((delta) => {
         game.update(delta, camera.current, carCollider);
 
+        scale = game.scale;
         time = game.time;
         peak = game.peak;
         notes = game.notes;
@@ -105,13 +107,13 @@
     color="#6c3baa"
 />
 
-<T.Mesh position.y={0} position.z={-10} material={sunMaterial}>
+<T.Mesh position.y={0} position.z={-10} {scale} material={sunMaterial}>
     <T.PlaneGeometry args={[20 + peak / 100, 20 + peak / 100]} />
 </T.Mesh>
 
-<T.Group position={[0, -1.1, -carZ]} rotation.x={TAU * -0.25}>
+<T.Group position={[0, -1.1, -carZ]} {scale} rotation.x={TAU * -0.25}>
     <T.Mesh material={gridMaterial}>
-        <T.PlaneGeometry args={[30, 10]} />
+        <T.PlaneGeometry args={[30, 20]} />
     </T.Mesh>
     {#await gltf then { scene }}
         <T
